@@ -24,6 +24,10 @@ pip install flask
 
 pip install flask_wtf
 
+# Installer flask_sqlalchemy :
+
+pip install flask_sqlalchemy
+
 # Une fois Flask installé, télécharger les fichiers et lancer app.py dans son répertoire :
 
 python app.py
