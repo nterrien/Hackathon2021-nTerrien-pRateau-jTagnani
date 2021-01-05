@@ -3,6 +3,8 @@
 ## Installation
 ### Installer python et pip
 
+# Python et pip :
+
 https://fr.wikihow.com/installer-Python
 
 Il est possible d'installer python à partir du microsoft store et pip s'installe automatiquement
