@@ -1,0 +1,22 @@
+{% extends "general.html.jinja2" %} 
+
+{% block head %}
+   <title>Hello World</title>
+{% endblock %} 
+
+{% block body %} 
+
+    <h1>Hello World</h1>
+    <br>
+    <form action="{{ url_for("home") }}" method="post">
+        <div class="row">
+            <div class="col-sm-offset-3 col-sm-6">
+                <div>
+                {{ form.hidden_tag() }}
+                {{ form.name(class_="form-control") }}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Go</button>
+    </form>
+{% endblock %} 
