@@ -1,1 +1,1 @@
-# Hackathon2021-nTerrien-pRateau-JTagnani
+# Hackathon2021-nTerrien-pRateau-jTagnani
