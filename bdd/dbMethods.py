@@ -1,5 +1,5 @@
 from bdd.database import db
-from bdd.models import Test, Category
+from bdd.models import Test, Category, Visiteur
 
 
 
@@ -27,6 +27,15 @@ def addCategory (name):
                 "a cause de : %s" % e)
         db.session.rollback()
 
+def addVisiteur (name):
+    visiteur = Visiteur(name=name)
+    try :
+        db.session.commit()
+    except Exception as e:
+        print("[1] Je ne peux pas ajouter un visiteur "
+                "a cause de : %s" % e)
+        db.session.rollback()
+
 
 ## Read
 def findCategory (name):
@@ -41,6 +50,8 @@ def findAllCategories ():
 def findTestsByCategory (categoryName):
     return Test.query.filter_by(category = categoryName).all()
 
+def findAllVisiteur ():
+    return Visiteur.query.all()
 
 ## Update
 def updateTest (id, name, category):
