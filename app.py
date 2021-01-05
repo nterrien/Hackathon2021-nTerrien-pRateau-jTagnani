@@ -29,6 +29,7 @@ def home():
 
 @app.route('/hello/<name>')
 def helloW(name):
+    print (findAllVisitor())
     return flask.render_template("hello.html.jinja2", name=name)
 
 

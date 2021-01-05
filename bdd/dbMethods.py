@@ -20,6 +20,7 @@ def addTest (name, category):
 
 def addCategory (name):
     category = Category(name=name)
+    db.session.add(category)
     try :
         db.session.commit()
     except Exception as e:
@@ -29,6 +30,7 @@ def addCategory (name):
 
 def addVisitor (name):
     visitor = Visitor(name=name)
+    db.session.add(visitor)
     try :
         db.session.commit()
     except Exception as e:
