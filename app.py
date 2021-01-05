@@ -21,7 +21,7 @@ def home():
     form = HelloForm()
     if form.validate_on_submit():
         name = form.name.data
-        addVisiteur (name)
+        addVisitor (name)
         return flask.redirect(flask.url_for('helloW', name=name))
     else:
         return flask.render_template("home.html.jinja2", form=form)
