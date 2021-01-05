@@ -30,5 +30,9 @@ def about():
     return flask.render_template("about.html.jinja2")
 
 
+@app.errorhandler(404)
+def not_found(e):
+    return flask.render_template("404.html.jinja2"), 404
+
 if __name__ == '__main__':
     app.run()
