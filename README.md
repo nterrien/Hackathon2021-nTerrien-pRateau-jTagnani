@@ -15,11 +15,22 @@ python --version
 
 pip --version
 
+
 ###  installer les dépendances :
+
+# Installer les requirements présents dans le fichier requirements.txt :
+
+# Dans le répertoire de travail pour installer Flask :
 
 Dans le répertoire de travail, executer :
 
 ```$ pip install flask Flask-WTF```
+
+# Installer flask_wtf
+
+pip install flask_wtf
+
+# Une fois Flask installé, télécharger les fichiers et lancer app.py dans son répertoire :
 
 OU
 
