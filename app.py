@@ -21,10 +21,13 @@ def home():
     else:
         return flask.render_template("home.html.jinja2", form=form)
 
-
 @app.route('/hello/<name>')
 def helloW(name):
     return flask.render_template("hello.html.jinja2", name=name)
+
+@app.route('/about')
+def about():
+    return flask.render_template("about.html.jinja2")
 
 
 if __name__ == '__main__':
