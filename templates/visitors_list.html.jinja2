@@ -1,0 +1,13 @@
+{% extends "general.html.jinja2" %} 
+
+{% block head %}
+   <title>Hello</title>
+{% endblock %} 
+
+{% block body %} 
+  <ul>Les visiteurs que nous avons eu sur notre super prototype de site sont :
+    {% for visitor in visitors %}
+    <li>{{visitor}}</li>
+    {% endfor %}
+  </ul>
+{% endblock %} 

@@ -21,7 +21,7 @@ def home():
     form = HelloForm()
     if form.validate_on_submit():
         name = form.name.data
-        addVisitor (name)
+        addVisitor(name)
         return flask.redirect(flask.url_for('helloW', name=name))
     else:
         return flask.render_template("home.html.jinja2", form=form)
@@ -44,6 +44,11 @@ def word():
         words = randomWords(form.number.data)
         return flask.render_template("word.html.jinja2", form=form, words=words)
     return flask.render_template("word.html.jinja2", form=form)
+
+
+@app.route('/visitors')
+def visitors_list():
+    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor())
 
 
 @app.errorhandler(404)
