@@ -11,7 +11,7 @@ class Category (db.Model):
     name = db.Column(db.Text, primary_key=True)
     tests = db.relationship('Test', backref='test.id', lazy='dynamic')
 
-class Visiteur (db.Model):
-    tablename = "visiteur"
+class Visitor (db.Model):
+    tablename = "visitor"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
