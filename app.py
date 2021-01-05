@@ -2,6 +2,7 @@ from flask import Flask
 import flask  # BSD License (BSD-3-Clause)
 from bdd.database import db, init_database, populate_database, clear_database
 
+
 app = Flask(__name__)
 app.config.from_object('config')
 
