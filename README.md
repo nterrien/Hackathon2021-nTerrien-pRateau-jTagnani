@@ -1,9 +1,8 @@
 # Hackathon2021-nTerrien-pRateau-jTagnani
 
 ## Installation
-### Installer python et pip
 
-# Python et pip :
+### Python et pip :
 
 https://fr.wikihow.com/installer-Python
 
@@ -15,26 +14,11 @@ python --version
 
 pip --version
 
-
 ###  installer les dépendances :
-
-# Installer les requirements présents dans le fichier requirements.txt :
-
-# Dans le répertoire de travail pour installer Flask :
 
 Dans le répertoire de travail, executer :
 
-```$ pip install flask Flask-WTF```
-
-# Installer flask_wtf
-
-pip install flask_wtf
-
-# Installer flask_sqlalchemy :
-
-pip install flask_sqlalchemy
-
-# Une fois Flask installé, télécharger les fichiers et lancer app.py dans son répertoire :
+```$ pip install flask Flask-WTF flask_sqlalchemy```
 
 OU
 
@@ -46,4 +30,3 @@ Dans le répertoire de travail lancer :
 ```python app.py```
 
 Puis aller sur : http://127.0.0.1:5000/
-
