@@ -1,0 +1,30 @@
+{% extends "general.html.jinja2" %} 
+
+{% block head %}
+   <title>Mot aléatoire</title>
+{% endblock %} 
+
+{% block body %}
+    <form action="{{ url_for("word") }}" method="post">
+        <div class="row">
+            <div class="col-sm-offset-3 col-sm-6">
+                <div>
+                {{ form.hidden_tag() }}
+                {{ form.number(class_="form-control") }}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Cliquez choisir les mots aléatoires</button>
+    </form>
+  {% if words | length == 1  %}
+    <p> Le mot est {{words[0]}}</p>
+  {% else %}
+    {% if words | length > 1 %} 
+        <p> Les mots sont : 
+        {% for word in words %}
+            <li>{{word}}</li>
+        {% endfor %}
+        </p>
+    {% endif %}
+  {% endif %}
+{% endblock %} 
