@@ -3,7 +3,8 @@ import flask  # BSD License (BSD-3-Clause)
 import os
 from werkzeug.utils import secure_filename
 from bdd.database import db, init_database, populate_database, clear_database
-from bdd.dbMethods import addVisitor, findAllVisitor
+from bdd.dbMethods import findAllVisitor, findNameUsage
+from api.nameAPI import saveNameInfo
 from forms.hello_form import HelloForm
 from forms.randomWord_form import NumberWordForm
 from src.calcul import randomWords
@@ -25,8 +26,8 @@ def home():
         username = session['username']
     form = HelloForm()
     if form.validate_on_submit():
-        name = form.name.data
-        addVisitor(name)
+        name = form.name.data.lower()
+        saveNameInfo(name)
         session['username'] = name
         return flask.redirect(flask.url_for('helloW', name=name))
     else:
@@ -35,7 +36,8 @@ def home():
 
 @app.route('/hello/<name>')
 def helloW(name):
-    return flask.render_template("hello.html.jinja2", name=name)
+    usages = findNameUsage (name)
+    return flask.render_template("hello.html.jinja2", name=name, usages=usages)
 
 
 @app.route('/about')
