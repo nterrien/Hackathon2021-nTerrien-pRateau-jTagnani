@@ -1,1 +1,1 @@
-web: CMD python3 .\app.py
+web: exec python3 .\app.py
