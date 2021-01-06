@@ -22,7 +22,7 @@ pip --version
 
 Dans le répertoire de travail, executer :
 
-```$ pip install flask Flask-WTF flask_sqlalchemy```
+```$ pip install flask Flask-WTF flask_sqlalchemy requests```
 
 OU
 
