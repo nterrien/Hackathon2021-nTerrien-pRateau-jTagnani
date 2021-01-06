@@ -6,7 +6,10 @@
 
 {% block body %} 
 
-    <h1>Rentre ton nom : </h1>
+    <h1>Rentre ton nom </h1>
+    {% if username %}
+        <p> Nom précédent : {{username}}
+    {% endif %}
     <br>
     <form action="{{ url_for("home") }}" method="post">
         <div class="row">

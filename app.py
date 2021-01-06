@@ -1,4 +1,4 @@
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, make_response, session
 import flask  # BSD License (BSD-3-Clause)
 import os
 from werkzeug.utils import secure_filename
@@ -20,13 +20,17 @@ with app.app_context():
 
 @app.route('/', methods=["GET", "POST"])
 def home():
+    username = None
+    if 'username' in session:
+        username = session['username']
     form = HelloForm()
     if form.validate_on_submit():
         name = form.name.data
         addVisitor(name)
+        session['username'] = name
         return flask.redirect(flask.url_for('helloW', name=name))
     else:
-        return flask.render_template("home.html.jinja2", form=form)
+        return flask.render_template("home.html.jinja2", form=form, username=username)
 
 
 @app.route('/hello/<name>')
@@ -50,7 +54,10 @@ def word():
 
 @app.route('/visitors')
 def visitors_list():
-    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor())
+    username = None
+    if 'username' in session:
+        username = session['username']
+    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor(), username=username)
 
 
 @app.route('/reset')
