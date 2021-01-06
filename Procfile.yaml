@@ -1,1 +1,1 @@
-web: exec python3 .\app.py
+web: bash start.sh
