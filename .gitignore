@@ -1,3 +1,7 @@
+# On peux le changer via le site poru l'experimentation mais c'est pas utile de l'upload sur le git
+static/favicon.ico
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
