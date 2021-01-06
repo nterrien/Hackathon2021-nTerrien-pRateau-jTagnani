@@ -36,7 +36,7 @@ def home():
 
 @app.route('/hello/<name>')
 def helloW(name):
-    usages = findNameUsage (name)
+    usages = findNameUsage(name)
     return flask.render_template("hello.html.jinja2", name=name, usages=usages)
 
 
@@ -74,18 +74,26 @@ def upload():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash('No file part')
+            flash('Erreur : Pas de fichier')
             return redirect(request.url)
         file = request.files['file']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
-            flash('No selected file')
+            flash('Erreur : Pas de fichier')
             return redirect(request.url)
-        if file and '.' in file.filename and file.filename .rsplit('.', 1)[1] == 'ico':
+        if file and '.' in file.filename and file.filename.rsplit('.', 1)[1] == 'ico':
             filename = "favicon.ico"
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return flask.redirect(flask.url_for('home'))
+        else:
+            if '.' in file.filename:
+                flash("Erreur : l'extension est " +
+                    file.filename .rsplit('.', 1)[1] +" au lieu de .ico")
+                return redirect(request.url)
+            else:
+                flash("Erreur : le fichier n'a pas d'extension, or l'extension dois être .ico")
+                return redirect(request.url)
     return flask.render_template("upload_favico.html.jinja2")
 
 
