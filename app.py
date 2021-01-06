@@ -50,6 +50,11 @@ def word():
 def visitors_list():
     return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor())
 
+@app.route('/reset')
+def reset():
+    clear_database()
+    init_database()
+    return flask.redirect(flask.url_for('home'))
 
 @app.errorhandler(404)
 def not_found(e):
