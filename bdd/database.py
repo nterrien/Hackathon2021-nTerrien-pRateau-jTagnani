@@ -9,17 +9,7 @@ def init_database():
 
 
 def populate_database():
-    from bdd.dbMethods import addTest
-
-    cat1 = "test important"
-    cat2 = "test pas important"
-    test1 = "je fais une bdd"
-    test2 = "je la teste"
-    test3 = "j'essaie de la peupler"
-
-    addTest (test1, cat1)
-    addTest (test2, cat1)
-    addTest (test3, cat2)
+    return
 
 
 def clear_database():
