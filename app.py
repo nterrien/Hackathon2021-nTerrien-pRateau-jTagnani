@@ -82,7 +82,6 @@ def upload():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        print(file.filename)
         if file and '.' in file.filename and file.filename .rsplit('.', 1)[1] == 'ico':
             filename = "favicon.ico"
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
