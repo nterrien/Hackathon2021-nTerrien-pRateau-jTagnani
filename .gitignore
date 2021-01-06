@@ -1,5 +1,5 @@
 # specific files
-bdd/bdd.db
+# bdd/bdd.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
