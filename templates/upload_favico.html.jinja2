@@ -1,0 +1,16 @@
+{% extends "general.html.jinja2" %} 
+
+{% block head %}
+   <title>Changer l'icone du site</title>
+{% endblock %} 
+
+{% block body %}
+ <h1>Changer l'icone du site</h1>
+ <p> Format accepté ".ico" seulement<p>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+{% endblock %} 
+
+
