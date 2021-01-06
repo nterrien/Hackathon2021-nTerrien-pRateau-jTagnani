@@ -39,6 +39,7 @@ def addVisitor (name, usages):
         db.session.rollback()
         return
     if not findNameUsage(name):
+        print (usages)
         for usage in usages:
             addNameUsage (name, usage['usage_full'], usage['usage_gender'])
 
