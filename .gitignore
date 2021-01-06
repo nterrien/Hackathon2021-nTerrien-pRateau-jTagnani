@@ -1,8 +1,8 @@
-# On peux le changer via le site poru l'experimentation mais c'est pas utile de l'upload sur le git
+# On peux le changer via le site pour l'experimentation mais c'est pas utile de l'upload sur le git
 static/favicon.ico
 
 # specific files
-#bdd/bdd.db
+bdd/bdd.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
