@@ -4,14 +4,10 @@ from bdd.dbMethods import findNameUsage, addVisitor
 API_KEY = "ha856565906"
 API_URL = "https://www.behindthename.com/api/lookup.json?key=" + API_KEY
 
-def getNameInfo (name):
-    name = name.lower()
+def saveNameInfo (name):
     bddResult = findNameUsage(name)
-    if bddResult:
-        return bddResult
-    else :
-        requestNameInfo (name)
-        return findNameUsage(name)
+    if not bddResult:
+        requestNameInfo(name)
 
 
 def requestNameInfo (name):

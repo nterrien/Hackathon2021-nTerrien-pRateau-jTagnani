@@ -1,8 +1,8 @@
 from flask import Flask, request
 import flask  # BSD License (BSD-3-Clause)
 from bdd.database import db, init_database, populate_database, clear_database
-from bdd.dbMethods import findAllVisitor
-from api.nameAPI import getNameInfo
+from bdd.dbMethods import findAllVisitor, findNameUsage
+from api.nameAPI import saveNameInfo
 from forms.hello_form import HelloForm
 from forms.randomWord_form import NumberWordForm
 from src.calcul import randomWords
@@ -21,10 +21,8 @@ with app.app_context():
 def home():
     form = HelloForm()
     if form.validate_on_submit():
-        name = form.name.data
-        detail = getNameInfo(name)
-        for usage in detail:
-            print (usage)
+        name = form.name.data.lower()
+        saveNameInfo(name)
         return flask.redirect(flask.url_for('helloW', name=name))
     else:
         return flask.render_template("home.html.jinja2", form=form)
@@ -32,7 +30,8 @@ def home():
 
 @app.route('/hello/<name>')
 def helloW(name):
-    return flask.render_template("hello.html.jinja2", name=name)
+    usages = findNameUsage (name)
+    return flask.render_template("hello.html.jinja2", name=name, usages=usages)
 
 
 @app.route('/about')
