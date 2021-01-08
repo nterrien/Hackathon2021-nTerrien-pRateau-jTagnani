@@ -38,7 +38,7 @@ Puis aller sur : http://127.0.0.1:5000
 
 ## Deployer le site sur Scalingo
 
-- Se connecter sur le site Scalingo
+- Se connecter sur le site [Scalingo](https://auth.scalingo.com/users/sign_in)
 - Créer une nouvelle app avec le bouton "CREATE A NEW APP"
 - Si Scalingo vous demande de faire l'étape "SSH KEY" suivez les instructions suivantes : 
   - Générer une clef SSH (vous en avez peut etre déjà une (voir : https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/checking-for-existing-ssh-keys), si c'est le cas cette sous-étape n'est pas necessaire) en suivant la partie "Generating a new SSH key" du tutoriel : https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key
