@@ -1,4 +1,4 @@
-from random import choice, randrange
+from random import randrange
 
 
 def random_line():
