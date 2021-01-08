@@ -31,6 +31,9 @@ Cloner le répertoire git avec :
 
 ```git clone https://github.com/nterrien/Hackathon2021-nTerrien-pRateau-jTagnani.git```
 
+Puis aller dans le répertoire de travail avec :
+```cd Hackathon2021-nTerrien-pRateau-jTagnani```
+
 Dans le répertoire de travail lancer :
 ```python app.py```
 
