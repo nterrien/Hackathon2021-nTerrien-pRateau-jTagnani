@@ -47,7 +47,7 @@ Puis aller sur : http://127.0.0.1:5000
 - Cliquer sur Next
 - Suivez les instructions à l'écran, qui devraient être :
   - Dans le répertoire de travail copier coller les deux lignes ```git remote add scalingo git@ssh.osc-fr1.scalingo.com:nomdelapp.git``` (le nomdelapp est ce que vous avez à la deuxieme étape, la commande exact est trouvable sur le site)
-  - Dans le répertoir de travail lancer la commande ```git push scalingo main``` (On précise ici que la commande utilise main et pas master)
+  - Dans le répertoir de travail lancer la commande ```git push scalingo main:master``` (On précise ici que la commande utilise main et pas master)
   - Aller sur l'adresse donnée par le site.
 
 ## Demonstration 
