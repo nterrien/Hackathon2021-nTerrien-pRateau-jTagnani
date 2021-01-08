@@ -28,7 +28,8 @@ def home():
         if visitor: username = visitor.name
     form = HelloForm()
     if form.validate_on_submit():
-        name = form.name.data.lower()
+        name = form.name.data.lower().replace('<', '').replace('>', '').replace(
+            '/', '').replace('\\', '').replace('&', '').replace('"', '').replace("'", '')
         id = saveNameInfo(name)
         session['user'] = id
         return flask.redirect(flask.url_for('helloW', name=name))
