@@ -24,7 +24,8 @@ def home():
     username = None
     if 'user' in session:
         user = session['user']
-        username = findVisitorById(user).name
+        visitor = findVisitorById(user)
+        if visitor: username = visitor.name
     form = HelloForm()
     if form.validate_on_submit():
         name = form.name.data.lower()
