@@ -67,6 +67,7 @@ def visitors_list():
 def reset():
     clear_database()
     init_database()
+    session.pop('user')
     return flask.redirect(flask.url_for('home'))
 
 
