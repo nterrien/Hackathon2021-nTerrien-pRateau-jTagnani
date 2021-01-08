@@ -1,24 +1,25 @@
 # Hackathon2021-nTerrien-pRateau-jTagnani
 
-## Installation
+## Lancer le site en local
+### Installation
 
-### Python:
+#### Python:
 
 https://wiki.python.org/moin/BeginnersGuide/Download
 
-### Pip
+#### Pip
 
 https://pip.pypa.io/en/stable/installing/#
 
 Il est possible d'installer python à partir du microsoft store et pip s'installe automatiquement
 
-### Vérifier que python et pip sont bien installés :
+#### Vérifier que python et pip sont bien installés :
 
 python --version
 
 pip --version
 
-###  installer les dépendances :
+####  installer les dépendances :
 
 Dans le répertoire de travail, executer :
 
@@ -28,10 +29,14 @@ OU
 
 ```$ pip install -r requirements.txt```
 
-## Execution
+### Execution
 
 Dans le répertoire de travail lancer :
 ```python app.py```
 
-Puis aller sur : http://127.0.0.1:5000/ ou http://0.0.0.0:5000
+Puis aller sur : http://0.0.0.0:5000
+
+## Deployer le site sur Scalingo
+
+TODO
 
