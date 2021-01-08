@@ -1,7 +1,7 @@
 # On peux le changer via le site poru l'experimentation mais c'est pas utile de l'upload sur le git
 static/favicon.ico
 
-# specific files
+# specific files test
 bdd/bdd.db
 
 # Byte-compiled / optimized / DLL files
