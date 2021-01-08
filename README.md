@@ -42,13 +42,13 @@ Puis aller sur : http://127.0.0.1:5000
 - Créer une nouvelle app avec le bouton "CREATE A NEW APP"
 - Si Scalingo vous demande de faire l'étape "SSH KEY" suivez les instructions suivantes : 
   - Générer une clef SSH (vous en avez peut etre déjà une (voir : https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/checking-for-existing-ssh-keys), si c'est le cas cette sous-étape n'est pas necessaire) en suivant la partie "Generating a new SSH key" du tutoriel : https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key
-  - Dans le champs Name mettez ce que vous voulez, et dans le champs Content copier-coller l'intégralité du contenu du fichier généré (id_rsa.pub, id_ecdsa.pub ou id_ed25519.pub). Ce fichier devrait se trouver dans /c/Users/_you_/.ssh/ sous Windows, /home/_you_/.ssh/ sous Linux ou dans /Users/_you_/.ssh sous MAC 
+  - Dans le champs Name mettez ce que vous voulez, et dans le champs Content copier-coller l'intégralité du contenu du fichier généré (id_rsa.pub, id_ecdsa.pub ou id_ed25519.pub). Ce fichier devrait se trouver dans /c/Users/**_Nom_utilisateur_**/.ssh/ sous Windows, /home/**_Nom_utilisateur_**/.ssh/ sous Linux ou dans /Users/**_Nom_utilisateur_**/.ssh sous MAC (Nom_utilisateur etant le nom d'utilisateur de votre PC)
 - Écrire le nom que vous voulez puis Cliquer sur Next
 - Cliquer sur Next
 - Suivez les instructions à l'écran, qui devraient être :
   - Dans le répertoire de travail copier coller les deux lignes ```git remote add scalingo git@ssh.osc-fr1.scalingo.com:nomdelapp.git``` (le nomdelapp est ce que vous avez à la deuxieme étape, la commande exact est trouvable sur le site)
-  - Dans le répertoir de travail lancer la commande ```git push scalingo master```
-  - Aller sur l'adresse donné par le site.
+  - Dans le répertoir de travail lancer la commande ```git push scalingo main``` (On précise ici que la commande utilise main et pas master)
+  - Aller sur l'adresse donnée par le site.
 
 ## Demonstration 
 
