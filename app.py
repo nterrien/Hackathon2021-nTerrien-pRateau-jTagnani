@@ -8,7 +8,6 @@ from bdd.dbMethods import findAllVisitor, findNameUsage, findVisitorById
 from api.nameAPI import saveNameInfo
 from forms.hello_form import HelloForm
 from forms.randomWord_form import NumberWordForm
-from forms.resetBdd_form import ResetBddForm
 from src.calcul import randomWords
 
 
@@ -65,11 +64,10 @@ def visitors_list():
     user = None
     if 'user' in session:
         user = session['user']
-    form = ResetBddForm()
-    if form.validate_on_submit():
+    if request.method == 'POST':
         print ("khzvlfjhvczjh")
         reset()
-    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor(), user=user, form=form)
+    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor(), user=user)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
