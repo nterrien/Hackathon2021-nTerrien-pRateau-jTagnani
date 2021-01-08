@@ -1,9 +1,10 @@
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, make_response, session
 import flask  # BSD License (BSD-3-Clause)
 import os
 from werkzeug.utils import secure_filename
 from bdd.database import db, init_database, populate_database, clear_database
-from bdd.dbMethods import addVisitor, findAllVisitor
+from bdd.dbMethods import findAllVisitor, findNameUsage
+from api.nameAPI import saveNameInfo
 from forms.hello_form import HelloForm
 from forms.randomWord_form import NumberWordForm
 from src.calcul import randomWords
@@ -20,18 +21,23 @@ with app.app_context():
 
 @app.route('/', methods=["GET", "POST"])
 def home():
+    username = None
+    if 'username' in session:
+        username = session['username']
     form = HelloForm()
     if form.validate_on_submit():
-        name = form.name.data
-        addVisitor(name)
+        name = form.name.data.lower()
+        saveNameInfo(name)
+        session['username'] = name
         return flask.redirect(flask.url_for('helloW', name=name))
     else:
-        return flask.render_template("home.html.jinja2", form=form)
+        return flask.render_template("home.html.jinja2", form=form, username=username)
 
 
 @app.route('/hello/<name>')
 def helloW(name):
-    return flask.render_template("hello.html.jinja2", name=name)
+    usages = findNameUsage(name)
+    return flask.render_template("hello.html.jinja2", name=name, usages=usages)
 
 
 @app.route('/about')
@@ -50,7 +56,10 @@ def word():
 
 @app.route('/visitors')
 def visitors_list():
-    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor())
+    username = None
+    if 'username' in session:
+        username = session['username']
+    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor(), username=username)
 
 
 @app.route('/reset')
@@ -65,19 +74,26 @@ def upload():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash('No file part')
+            flash('Erreur : Pas de fichier')
             return redirect(request.url)
         file = request.files['file']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
-            flash('No selected file')
+            flash('Erreur : Pas de fichier')
             return redirect(request.url)
-        print(file.filename)
-        if file and '.' in file.filename and file.filename .rsplit('.', 1)[1] == 'ico':
+        if file and '.' in file.filename and file.filename.rsplit('.', 1)[1] == 'ico':
             filename = "favicon.ico"
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return flask.redirect(flask.url_for('home'))
+        else:
+            if '.' in file.filename:
+                flash("Erreur : l'extension est " +
+                    file.filename .rsplit('.', 1)[1] +" au lieu de .ico")
+                return redirect(request.url)
+            else:
+                flash("Erreur : le fichier n'a pas d'extension, or l'extension dois être .ico")
+                return redirect(request.url)
     return flask.render_template("upload_favico.html.jinja2")
 
 

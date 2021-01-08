@@ -2,9 +2,13 @@
 
 ## Installation
 
-### Python et pip :
+### Python:
 
-https://fr.wikihow.com/installer-Python
+https://wiki.python.org/moin/BeginnersGuide/Download
+
+### Pip
+
+https://pip.pypa.io/en/stable/installing/#
 
 Il est possible d'installer python à partir du microsoft store et pip s'installe automatiquement
 
@@ -18,7 +22,7 @@ pip --version
 
 Dans le répertoire de travail, executer :
 
-```$ pip install flask Flask-WTF flask_sqlalchemy```
+```$ pip install flask Flask-WTF flask_sqlalchemy requests```
 
 OU
 
@@ -30,3 +34,4 @@ Dans le répertoire de travail lancer :
 ```python app.py```
 
 Puis aller sur : http://127.0.0.1:5000/ ou http://0.0.0.0:5000
+

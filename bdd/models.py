@@ -12,6 +12,14 @@ class Category (db.Model):
     tests = db.relationship('Test', backref='test.id', lazy='dynamic')
 
 class Visitor (db.Model):
-    tablename = "visitor"
+    __tablename__ = "visitor"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
+    usages = db.relationship('NameUsage', backref='nameUsage.name', lazy='dynamic')
+
+class NameUsage (db.Model):
+    __tablename__ = "nameUsage"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text, db.ForeignKey('visitor.name'))
+    usage = db.Column(db.Text)
+    gender = db.Column(db.Text)
