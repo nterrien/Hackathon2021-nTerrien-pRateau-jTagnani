@@ -7,7 +7,7 @@
 {% block body %} 
   <ul>Les visiteurs que nous avons eu sur notre super prototype de site sont :
     {% for visitor in visitors %}
-      {% if username == visitor.name %}
+      {% if user == visitor.id %}
         <li><b>{{visitor.name}} (Vous)</b></li>
       {% else %}
         <li>{{visitor.name}}</li>

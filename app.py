@@ -3,7 +3,7 @@ import flask  # BSD License (BSD-3-Clause)
 import os
 from werkzeug.utils import secure_filename
 from bdd.database import db, init_database, populate_database, clear_database
-from bdd.dbMethods import findAllVisitor, findNameUsage
+from bdd.dbMethods import findAllVisitor, findNameUsage, findVisitorById
 from api.nameAPI import saveNameInfo
 from forms.hello_form import HelloForm
 from forms.randomWord_form import NumberWordForm
@@ -22,13 +22,14 @@ with app.app_context():
 @app.route('/', methods=["GET", "POST"])
 def home():
     username = None
-    if 'username' in session:
-        username = session['username']
+    if 'user' in session:
+        user = session['user']
+        username = findVisitorById(user).name
     form = HelloForm()
     if form.validate_on_submit():
         name = form.name.data.lower()
-        saveNameInfo(name)
-        session['username'] = name
+        id = saveNameInfo(name)
+        session['user'] = id
         return flask.redirect(flask.url_for('helloW', name=name))
     else:
         return flask.render_template("home.html.jinja2", form=form, username=username)
@@ -56,10 +57,10 @@ def word():
 
 @app.route('/visitors')
 def visitors_list():
-    username = None
-    if 'username' in session:
-        username = session['username']
-    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor(), username=username)
+    user = None
+    if 'user' in session:
+        user = session['user']
+    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor(), user=user)
 
 
 @app.route('/reset')

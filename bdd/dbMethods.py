@@ -41,6 +41,7 @@ def addVisitor (name, usages):
     if not findNameUsage(name):
         for usage in usages:
             addNameUsage (name, usage['usage_full'], usage['usage_gender'])
+    return visitor.id
 
 def addNameUsage (name, usage, gender):
     nameUsage = NameUsage(name=name, usage=usage, gender=gender)
@@ -65,6 +66,9 @@ def findAllCategories ():
 
 def findTestsByCategory (categoryName):
     return Test.query.filter_by(category = categoryName).all()
+
+def findVisitorById (id):
+    return Visitor.query.filter_by(id = id).first()
 
 def findAllVisitor ():
     return Visitor.query.all()
