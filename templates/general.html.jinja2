@@ -52,5 +52,18 @@
     <!-- Fichiers Javascript nécessaires pour certains composants Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+	<!-- Fichiers Javascript nécessaires pour les websocket -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+	<script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+
+            var socket = io(namespace);
+
+            socket.on('reset_bdd', function() {
+                socket.emit('my_event', {data: 'connected to the SocketServer...'});
+            });
+        });
+    </script>
     </body>
 </html>

@@ -5,6 +5,7 @@
 {% endblock %} 
 
 {% block body %} 
+
   <ul>Les visiteurs que nous avons eu sur notre super prototype de site sont :
     {% for visitor in visitors %}
       {% if user == visitor.id %}
@@ -14,8 +15,11 @@
       {% endif %}
     {% endfor %}
   </ul>
+  
   <br>
-    <div>
-    <a href="{{ url_for("reset") }}">Reset la base de données</button>
-    </div>
-{% endblock %} 
+  
+    <form action="{{ url_for("visitors_list") }}" method="post">
+        <button type="submit" class="btn btn-primary mb-2">Go</button>
+    </form>
+  
+{% endblock %}

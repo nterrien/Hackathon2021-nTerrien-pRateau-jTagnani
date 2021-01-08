@@ -1,5 +1,6 @@
 from flask import Flask, flash, request, redirect, url_for, make_response, session
 import flask  # BSD License (BSD-3-Clause)
+from flask_socketio import SocketIO, emit
 import os
 from werkzeug.utils import secure_filename
 from bdd.database import db, init_database, populate_database, clear_database
@@ -7,11 +8,14 @@ from bdd.dbMethods import findAllVisitor, findNameUsage, findVisitorById
 from api.nameAPI import saveNameInfo
 from forms.hello_form import HelloForm
 from forms.randomWord_form import NumberWordForm
+from forms.resetBdd_form import ResetBddForm
 from src.calcul import randomWords
 
 
 app = Flask(__name__)
 app.config.from_object('config')
+
+socketio = SocketIO(app)
 
 db.init_app(app)
 
@@ -56,20 +60,16 @@ def word():
     return flask.render_template("word.html.jinja2", form=form)
 
 
-@app.route('/visitors')
+@app.route('/visitors', methods=['GET', 'POST'])
 def visitors_list():
     user = None
     if 'user' in session:
         user = session['user']
-    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor(), user=user)
-
-
-@app.route('/reset')
-def reset():
-    clear_database()
-    init_database()
-    if 'user' in session : session.pop('user')
-    return flask.redirect(flask.url_for('home'))
+    form = ResetBddForm()
+    if form.validate_on_submit():
+        print ("khzvlfjhvczjh")
+        reset()
+    return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor(), user=user, form=form)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -105,5 +105,20 @@ def not_found(e):
     return flask.render_template("404.html.jinja2"), 404
 
 
+
+def reset():
+    print ('cool !')
+    clear_database()
+    init_database()
+    emit('bdd_reset', message, broadcast=True)
+
+
+@socketio.on('bdd_reset')
+def handle_BDD_reset (message):
+    print ('cool')
+    if 'user' in session : session.pop('user')
+    return flask.redirect(flask.url_for('home'))
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+    socketio.run(app, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
