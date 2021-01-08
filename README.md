@@ -33,4 +33,5 @@ OU
 Dans le répertoire de travail lancer :
 ```python app.py```
 
-Puis aller sur : http://127.0.0.1:5000/
+Puis aller sur : http://127.0.0.1:5000/ ou http://0.0.0.0:5000
+
