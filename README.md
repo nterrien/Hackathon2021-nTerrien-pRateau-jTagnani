@@ -34,9 +34,15 @@ OU
 Dans le répertoire de travail lancer :
 ```python app.py```
 
-Puis aller sur : http://0.0.0.0:5000
+Puis aller sur : http://127.0.0.1:5000
 
 ## Deployer le site sur Scalingo
 
-TODO
-
+- Se connecter sur le site Scalingo
+- Créer une nouvelle app avec le bouton "CREATE A NEW APP"
+- Écrire le nom que vous voulez puis Cliquer sur Next
+- Cliquer sur Next
+- Suivez les instructions à l'écran, qui devraient être :
+ - Dans le répertoire de travail copier coller les deux lignes ```git remote add scalingo git@ssh.osc-fr1.scalingo.com:nomdelapp.git``` (le nomdelapp est ce que vous avez à la deuxieme étape, la commande exact est trouvable sur le site)
+ - Dans le répertoir de travail lancer la commande ```git push scalingo master```
+ - Aller sur l'adresse donné par le site.
