@@ -1,27 +1,11 @@
 {% extends "general.html.jinja2" %} 
 
 {% block head %}
-   <title>Hello World</title>
+   <title>Bonjour</title>
 {% endblock %} 
 
 {% block body %} 
 
-    <h1>Rentre ton nom </h1>
-    {% if username %}
-        <p> Nom précédent : {{username}}
-    {% endif %}
-    <br>
-    <form action="{{ url_for("home") }}" method="post">
-        <div class="row">
-            <div class="col-sm-offset-3 col-sm-6">
-                <div>
-                {{ form.hidden_tag() }}
-                {{ form.name(class_="form-control") }}
-                </div>
-            </div>
-        </div>
-        <br>
-        <button type="submit" class="btn btn-primary mb-2">Go</button>
-    </form>
+   Bonjour
     
 {% endblock %} 
