@@ -65,7 +65,6 @@ def visitors_list():
     if 'user' in session:
         user = session['user']
     if request.method == 'POST':
-        print ("khzvlfjhvczjh")
         reset()
     return flask.render_template("visitors_list.html.jinja2", visitors=findAllVisitor(), user=user)
 
@@ -103,17 +102,20 @@ def not_found(e):
     return flask.render_template("404.html.jinja2"), 404
 
 
-
 def reset():
-    print ('cool !')
     clear_database()
     init_database()
-    emit('bdd_reset', message, broadcast=True)
+    username = "un utilisateur inconnu"
+    if 'user' in session:
+        visitor = findVisitorById(session['user'])
+        if visitor: username = visitor.name
+    print(username)
+    socketio.emit('bdd_reset', username)
 
-
-@socketio.on('bdd_reset')
-def handle_BDD_reset (message):
+@socketio.on('session_reset')
+def handle_session_reset (message):
     print ('cool')
+    print (message)
     if 'user' in session : session.pop('user')
     return flask.redirect(flask.url_for('home'))
 

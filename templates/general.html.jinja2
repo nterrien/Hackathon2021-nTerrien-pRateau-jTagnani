@@ -60,8 +60,9 @@
 
             var socket = io(namespace);
 
-            socket.on('reset_bdd', function() {
-                socket.emit('my_event', {data: 'connected to the SocketServer...'});
+            socket.on('bdd_reset', function(message) {
+				console.log (message);
+                socket.emit('session_reset', {data: 'connected to the SocketServer...'});
             });
         });
     </script>
