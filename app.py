@@ -4,7 +4,7 @@ import os
 from werkzeug.utils import secure_filename
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.objects.washingMachine import WashingMachine
-from datetime import datetime
+from datetime import datetime, date
 
 
 app = Flask(__name__)
@@ -22,7 +22,7 @@ def home():
 
 @app.route('/check', methods=["GET", "POST"])
 def check():
-    print (machine.checkDate(datetime.today()))
+    print (machine.checkDate(date.today()))
     return flask.render_template("home.html.jinja2")
 
 @app.route('/findAll', methods=["GET", "POST"])
