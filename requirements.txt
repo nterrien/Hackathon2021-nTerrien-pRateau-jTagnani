@@ -2,3 +2,5 @@ flask
 Flask-WTF
 flask_sqlalchemy
 requests
+Flask-Datepicker
+Flask-Bootstrap

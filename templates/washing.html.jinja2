@@ -1,0 +1,90 @@
+{% extends "general.html.jinja2" %} 
+
+{% block title %}
+Réservation de machine à laver
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {{ datepicker.loader(theme="ui-darkness") }} {# to load jQuery-ui #}
+  {{ datepicker.picker(id=".dp", dateFormat='dd/mm/yy') }}
+{% endblock %}
+
+{% block content %} 
+    
+
+    <div class="col-md-offset-2 col-md-8 text-center"> 
+
+        <form action="{{ url_for("washing") }}" method="post">
+            <div class="row">
+                <div class="col-md-offset-3 col-sm-3">
+                    {{ form.hidden_tag() }}
+                    {{ form.machine(class_="form-control") }}
+                </div>
+                <div class="col-sm-3">
+                    {{ form.date(class_="form-control dp") }}
+                </div>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary mb-2">Voir les disponibilités</button>
+        </form>
+        Disponibilité de la machine {{form.machine.data}} la semaine du {{form.date.data}}
+        <div class="hide-smartphone"> Desktop</div>
+        <div class="hide-desktop"> Smartphone</div>
+    </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class ="col-xs-1 col-sm-1 col-md-4">
+                        <p class="text-right hide-smartphone">Heure</p>
+                        <p class="text-right hide-desktop">H</p>
+                        {% for hour in range(0,24,2) %}
+                            <div class="hour">
+                              <p> {{hour}}h </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xs-11 col-sm-11 col-md-4 border"> 
+                        <p class="text-center">Lundi<p>
+                        <div class="day">
+                        </div>
+                    </div>
+                    <div class="col-md-4 hide-smartphone border">
+                        <p class="text-center" >Mardi<p>
+                        <div class="day">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 hide-smartphone ">
+                <div class="row">
+                    <div class="col-md-2 border"> 
+                        <p class="text-center">Mercredi<p> 
+                        <div class="day">
+                        </div>
+                    </div>
+                    <div class="col-md-2 border">
+                        <p class="text-center">Jeudi<p>
+                        <div class="day">
+                        </div>
+                    </div>
+                    <div class="col-md-2 border">
+                        <p class="text-center">Vendredi<p>
+                        <div class="day">
+                        </div>
+                    </div>
+                    <div class="col-md-2 border">
+                        <p class="text-center">Samedi<p>
+                        <div class="day">
+                        </div>
+                    </div>
+                    <div class="col-md-2 border">
+                        <p class="text-center">Dimanche<p>
+                        <div class="day">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %} 
