@@ -8,5 +8,11 @@ On code :
 Réservation de salle de la MDE et des machines à laver
 (si pas api externe avec CARAE, on peut utiliser une Api Zimbra)
 
+- Frontend Machine
+- BDD Machine
+- Fronend salle MDE
+- BDD MDE
+- Auth
+
 
 
