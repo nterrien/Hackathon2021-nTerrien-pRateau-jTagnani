@@ -4,6 +4,7 @@ import os
 from werkzeug.utils import secure_filename
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.objects.washingMachine import WashingMachine
+from bdd.dbMethods import addUser, findUser, updateUser
 from datetime import datetime, date
 
 
@@ -16,24 +17,44 @@ with app.app_context():
     init_database()
     machine = WashingMachine ("1")
 
+
 @app.route('/', methods=["GET", "POST"])
 def home():
     return flask.render_template("home.html.jinja2")
 
-@app.route('/check', methods=["GET", "POST"])
+## Pages pour montrer le fonctionnement de WashingMachine
+@app.route('/machine/check', methods=["GET", "POST"])
 def check():
     print (machine.checkDate(date.today()))
     return flask.render_template("home.html.jinja2")
 
-@app.route('/findAll', methods=["GET", "POST"])
-def find():
+@app.route('/machine/findAll', methods=["GET", "POST"])
+def findAll():
     print (machine.findAll())
     return flask.render_template("home.html.jinja2")
 
-@app.route('/reserve', methods=["GET", "POST"])
+@app.route('/machine/reserve', methods=["GET", "POST"])
 def reserve():
     machine.reserve(datetime.today())
     return flask.render_template("home.html.jinja2")
+
+## TODO: Pages pour montrer le fonctionnement de User
+@app.route('/user/create', methods=["GET", "POST"])
+def create():
+    addUser ("admin", "password")
+    return flask.render_template("home.html.jinja2")
+
+@app.route('/user/find', methods=["GET", "POST"])
+def find():
+    print (findUser("admin"))
+    return flask.render_template("home.html.jinja2")
+
+@app.route('/user/update', methods=["GET", "POST"])
+def update():
+    user = findUser("admin")
+    updateUser (user, "admin2", "new password")
+    return flask.render_template("home.html.jinja2")
+
 
 
 @app.errorhandler(404)
