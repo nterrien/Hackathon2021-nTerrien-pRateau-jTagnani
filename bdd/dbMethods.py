@@ -1,11 +1,11 @@
 from bdd.database import db
-from bdd.models import Reservation
+from bdd.models import Reservation, ReservedObject
 
 
 
 ## Create
-def addReservation (name, start, end):
-    reservation = Reservation (name=name, start=start, end=end)
+def addReservation (name, start, end, label):
+    reservation = Reservation (name=name, start=start, end=end, object=label)
     db.session.add (reservation)
     try :
         db.session.commit()
@@ -14,13 +14,28 @@ def addReservation (name, start, end):
                 "a cause de : %s" % e)
         db.session.rollback()
 
-
+def addReservedObject (label):
+    object = ReservedObject(label=label)
+    db.session.add (object)
+    try :
+        db.session.commit()
+    except Exception as e:
+        print("[1] Je ne peux pas ajouter d'object à réserver "
+                "a cause de : %s" % e)
+        db.session.rollback()
 
 ## Read
 def findReservation (id):
     return Reservation.query.filter_by(id = id).first()
 
+def findAllReservation ():
+    return Reservation.query.all()
 
+def findAllReservationByObject (object):
+    return Reservation.query.filter_by(object = object).all()
+
+def findAllReservationByObjectAndByTime (object, timeStart, timeEnd):
+    return Reservation.query.filter_by(object = object).filter(Reservation.end > timeStart, Reservation.start < timeEnd).all()
 
 ## Update
 def updateReservation (id, name, start, end):
