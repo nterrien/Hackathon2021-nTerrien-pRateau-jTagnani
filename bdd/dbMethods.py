@@ -43,10 +43,10 @@ def findAllReservation ():
     return Reservation.query.all()
 
 def findAllReservationByObject (object):
-    return Reservation.query.filter_by(object = object).all()
+    return Reservation.query.filter_by(object = object).order_by(Reservation.start).all()
 
 def findAllReservationByObjectAndByTime (object, timeStart, timeEnd):
-    return Reservation.query.filter_by(object = object).filter(Reservation.end > timeStart, Reservation.start < timeEnd).all()
+    return Reservation.query.filter_by(object = object).filter(Reservation.end > timeStart, Reservation.start < timeEnd).order_by(Reservation.start).all()
 
 def findUser (username):
     return User.query.filter_by(username = username).first()
