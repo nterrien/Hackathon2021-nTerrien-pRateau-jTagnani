@@ -3,3 +3,30 @@
     border-radius: 0;
 }
 
+@media (max-width: 767px) {
+    .hide-smartphone {
+        display: none;
+    }
+}
+
+@media (min-width: 767px) {
+    .hide-desktop {
+        display: none;
+    }
+}
+
+.day {
+    min-height: 375px;
+    height: 96vh;
+    margin: 0;
+    padding: 0;
+}
+
+.border {
+    border: 1px solid black;
+}
+
+.hour {
+    height: 8vh;
+    text-align: right;
+}

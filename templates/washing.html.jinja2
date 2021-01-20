@@ -1,0 +1,193 @@
+{% extends "general.html.jinja2" %} 
+
+{% block title %}
+Réservation de machine à laver
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {{ datepicker.loader(theme="ui-darkness") }} {# to load jQuery-ui #}
+  {{ datepicker.picker(id=".dp", dateFormat='dd/mm/yy') }}
+{% endblock %}
+
+{% block content %} 
+    
+
+    <div class="col-md-offset-2 col-md-8 text-center"> 
+
+        <form action="{{ url_for("washing") }}" method="post">
+            <div class="row">
+                <div class="col-md-offset-3 col-sm-3">
+                    {{ form.agenda.hidden_tag() }}
+                    Machine à laver : {{ form.agenda.machine(class_="form-control") }}
+                </div>
+                <div class="col-sm-3">
+                    Date : {{ form.agenda.date(class_="form-control dp") }}
+                </div>
+            </div>
+            <br>
+            <button type="submit" name="agenda" class="btn btn-primary mb-2">Voir les disponibilités</button>
+            <br>
+            <a data-toggle="collapse" name="collapse" class="btn" data-target="#reservation">Reservation</a>
+            <div class="row">
+                <div id="reservation" class="collapse col-md-offset-2 col-md-8 text-center"> 
+                        <div class="row">
+                            <div class="col-sm-2">
+                                Début : 
+                            </div>
+                            <div class="col-sm-5">
+                                {{ form.reservation.hidden_tag() }}
+                                {{ form.reservation.startDate(class_="form-control dp") }}
+                            </div>
+                            <div class="col-sm-5">
+                                {{ form.reservation.startHour(class_="form-control") }}
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" name="reservation" class="btn btn-primary mb-2">Reserver la machine pour 45 minutes</button>
+                </div>
+            </div>
+        </form>
+        {# <div class="hide-smartphone"> Desktop</div>
+        <div class="hide-desktop"> Smartphone {{form.date.data.weekday()}}</div> #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                            <span>{{ message }}</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+
+        <h3 class="col-12">Disponibilité de la machine {{form.agenda.machine.data}} la semaine du {{form.agenda.date.data.strftime('%d/%m/%Y')}}</h3>
+    </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class ="col-xs-1 col-sm-1 col-md-4">
+                        <p class="text-right hide-smartphone">Heure</p>
+                        <p class="text-right hide-desktop">H</p>
+                        {% for hour in range(0,24,2) %}
+                            <div class="hour">
+                              <p> {{hour}}h </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="col-xs-11 col-sm-11 col-md-4 border"> 
+                        <p class="text-center">Lundi {{week[0].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[0]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-4 hide-smartphone border">
+                        <p class="text-center" >Mardi {{week[1].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[1]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 hide-smartphone ">
+                <div class="row">
+                    <div class="col-md-2 border"> 
+                        <p class="text-center">Mercredi {{week[2].strftime('%d/%m/%y')}}<p> 
+                        <div class="day">
+                            {% for reservation in agenda[2]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-2 border">
+                        <p class="text-center">Jeudi {{week[3].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[3]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-2 border">
+                        <p class="text-center">Vendredi {{week[4].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[4]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-2 border">
+                        <p class="text-center">Samedi {{week[5].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[5]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-md-2 border">
+                        <p class="text-center">Dimanche {{week[6].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[6]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %} 

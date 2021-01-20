@@ -13,10 +13,9 @@ def initWashingMachineList ():
     machineList = []
     for id in range (4):
         machineList.append (WashingMachine (id))
-    return machineList
 
 def addWashingMachine (id):
-    ''' Ajoute une machine à laver à la liste et la renvoie. Renvois la machine correspondante si elle existe déjà'''
+    ''' Ajoute une machine à laver à la liste et la renvoie. Renvoie la machine correspondante si elle existe déjà'''
     try :
         return findMachine (id)
     except Exception as e:
@@ -38,13 +37,16 @@ def findMachineWith404 (id):
         print(e)
         abort(404)
 
+def getMachineList ():
+    return machineList
+
 
 class WashingMachine (ReservedObject):
 
     def __init__ (self, id):
         super().__init__(id, BASE_LABEL)
-        self.duration = timedelta(DURATION)
+        self.duration = timedelta(minutes=DURATION)
 
     def reserve (self, dtStart):
         dtEnd = dtStart + self.duration
-        super().reserve (dtStart, dtEnd)
+        return super().reserve (dtStart, dtEnd)

@@ -3,3 +3,5 @@ Flask-WTF
 flask_sqlalchemy
 requests
 flask_hashing
+Flask-Datepicker
+Flask-Bootstrap

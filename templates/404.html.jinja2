@@ -1,10 +1,12 @@
 {% extends "general.html.jinja2" %} 
 
-{% block head %}
-   <title>Page Not Found</title>
+{% block title %}
+  Page Not Found
 {% endblock %} 
 
-{% block body %} 
-  <h1>Oups! Cette page n'existe pas.</h1> 
-  <a href="{{ url_for('home') }}"><p>Cliquez ici</a> pour retourner à l'accueil</p> 
+{% block content %} 
+  <div class="col-md-offset-2 col-md-8 text-center"> 
+    <h1>Oups! Cette page n'existe pas.</h1> 
+    <a href="{{ url_for('home') }}"><p>Cliquez ici</a> pour retourner à l'accueil</p> 
+  </div>
 {% endblock %} 
