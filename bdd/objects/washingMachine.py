@@ -13,7 +13,6 @@ def initWashingMachineList ():
     machineList = []
     for id in range (4):
         machineList.append (WashingMachine (id))
-    return machineList
 
 def addWashingMachine (id):
     ''' Ajoute une machine à laver à la liste et la renvoie. Renvois la machine correspondante si elle existe déjà'''

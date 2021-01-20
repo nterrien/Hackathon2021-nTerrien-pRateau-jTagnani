@@ -4,6 +4,7 @@ import os
 from werkzeug.utils import secure_filename
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.objects.washingMachine import machineList, initWashingMachineList, findMachineWith404
+from bdd.objects.room import roomList, initRoomList, findRoomWith404
 from bdd.dbMethods import addUser, findUser, updateUser
 from datetime import datetime, date
 
@@ -17,6 +18,7 @@ db.init_app(app)
 def initApp ():
     init_database()
     initWashingMachineList ()
+    initRoomList ()
 
 
 with app.app_context():
