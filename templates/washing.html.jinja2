@@ -19,10 +19,12 @@ Réservation de machine à laver
             <div class="row">
                 <div class="col-md-offset-3 col-sm-3">
                     {{ form.agenda.hidden_tag() }}
-                    Machine à laver : {{ form.agenda.machine(class_="form-control") }}
+                    {{ form.agenda.machine.label}}
+                    {{ form.agenda.machine(class_="form-control") }}
                 </div>
                 <div class="col-sm-3">
-                    Date : {{ form.agenda.date(class_="form-control dp") }}
+                    {{ form.agenda.date.label}}
+                    {{ form.agenda.date(class_="form-control dp") }}
                 </div>
             </div>
             <br>
@@ -32,15 +34,13 @@ Réservation de machine à laver
             <div class="row">
                 <div id="reservation" class="collapse col-md-offset-2 col-md-8 text-center"> 
                         <div class="row">
-                            <div class="col-sm-2">
-                                Début : 
-                            </div>
-                            <div class="col-sm-5">
+                            <div class="col-sm-6">
                                 {{ form.reservation.hidden_tag() }}
+                                {{ form.reservation.startDate.label }}
                                 {{ form.reservation.startDate(class_="form-control dp") }}
                             </div>
-                            <div class="col-sm-5">
-                            Heure de début, format heures:minutes (14h -> 14:00)
+                            <div class="col-sm-6">
+                                {{ form.reservation.startHour.label }}
                                 {{ form.reservation.startHour(class_="form-control") }}
                             </div>
                         </div>
