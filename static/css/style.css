@@ -30,3 +30,7 @@
     height: 8vh;
     text-align: right;
 }
+
+.selectedDay{
+    background-color:rgb(240, 240, 240)
+}

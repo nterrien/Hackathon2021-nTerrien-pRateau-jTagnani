@@ -63,11 +63,9 @@ Réservation de machine à laver
                 {% endfor %}
             {% endif %}
         {% endwith %}
-
-
         <h3 class="col-12">Disponibilité de la machine {{form.agenda.machine.data}} la semaine du {{form.agenda.date.data.strftime('%d/%m/%Y')}}</h3>
     </div>
-        <div class="row">
+        <div class="row hide-smartphone">
             <div class="col-md-4">
                 <div class="row">
                     <div class ="col-xs-1 col-sm-1 col-md-4">
@@ -79,7 +77,11 @@ Réservation de machine à laver
                             </div>
                         {% endfor %}
                     </div>
-                    <div class="col-xs-11 col-sm-11 col-md-4 border"> 
+                    {% if form.agenda.date.data == week[0] %}
+                        <div class="col-md-4 border selectedDay"> 
+                    {% else %}
+                        <div class="col-md-4 border"> 
+                    {% endif %}
                         <p class="text-center">Lundi {{week[0].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                             {% for reservation in agenda[0]%}
@@ -94,7 +96,11 @@ Réservation de machine à laver
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="col-md-4 hide-smartphone border">
+                        {% if form.agenda.date.data == week[1] %}
+                            <div class="col-md-4 border selectedDay"> 
+                        {% else %}
+                            <div class="col-md-4 border"> 
+                        {% endif %}
                         <p class="text-center" >Mardi {{week[1].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                             {% for reservation in agenda[1]%}
@@ -111,11 +117,15 @@ Réservation de machine à laver
                     </div>
                 </div>
             </div>
-            <div class="col-md-8 hide-smartphone ">
+            <div class="col-md-8">
                 <div class="row">
-                    <div class="col-md-2 border"> 
-                        <p class="text-center">Mercredi {{week[2].strftime('%d/%m/%y')}}<p> 
-                        <div class="day">
+                    {% if form.agenda.date.data == week[2] %}
+                        <div class="col-md-2 border selectedDay"> 
+                    {% else %}
+                        <div class="col-md-2 border"> 
+                    {% endif %}
+                        <p class="text-center">Mercredi {{week[2].strftime('%d/%m/%y')}}<p>
+                            <div class="day">
                             {% for reservation in agenda[2]%}
                                 {% if reservation[1] == None %}
                                     <div style="height:{{reservation[0]}}%">
@@ -128,7 +138,11 @@ Réservation de machine à laver
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="col-md-2 border">
+                    {% if form.agenda.date.data == week[3] %}
+                        <div class="col-md-2 border selectedDay"> 
+                    {% else %}
+                        <div class="col-md-2 border"> 
+                    {% endif %}
                         <p class="text-center">Jeudi {{week[3].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                             {% for reservation in agenda[3]%}
@@ -143,7 +157,11 @@ Réservation de machine à laver
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="col-md-2 border">
+                    {% if form.agenda.date.data == week[4] %}
+                        <div class="col-md-2 border selectedDay"> 
+                    {% else %}
+                        <div class="col-md-2 border"> 
+                    {% endif %}
                         <p class="text-center">Vendredi {{week[4].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                             {% for reservation in agenda[4]%}
@@ -158,7 +176,11 @@ Réservation de machine à laver
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="col-md-2 border">
+                    {% if form.agenda.date.data == week[5] %}
+                        <div class="col-md-2 border selectedDay"> 
+                    {% else %}
+                        <div class="col-md-2 border"> 
+                    {% endif %}
                         <p class="text-center">Samedi {{week[5].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                             {% for reservation in agenda[5]%}
@@ -173,7 +195,11 @@ Réservation de machine à laver
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="col-md-2 border">
+                    {% if form.agenda.date.data == week[6] %}
+                        <div class="col-md-2 border selectedDay"> 
+                    {% else %}
+                        <div class="col-md-2 border"> 
+                    {% endif %}
                         <p class="text-center">Dimanche {{week[6].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                             {% for reservation in agenda[6]%}
