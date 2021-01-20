@@ -2,10 +2,11 @@ from flask import Flask, flash, request, redirect, url_for, make_response, sessi
 import flask  # BSD License (BSD-3-Clause)
 import os
 from werkzeug.utils import secure_filename
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
 from forms.washing_machine_form import WashingMachineForm
+from forms.washing_machine_reservation_form import WashingMachineReservationForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.objects.washingMachine import WashingMachine
 
@@ -32,14 +33,41 @@ def home():
 @app.route('/washing', methods=["GET", "POST"])
 def washing():
     # Appel à la database TODO
-    fausseresultatDB = [{'id': 1}, {'id': 2}]
+    fausseresultatDB = [{'id': 1}, {'id': 2}, {'id': 3}, {'id': 4}]
     form = WashingMachineForm(obj=fausseresultatDB)
     form.machine.choices = [(g['id']) for g in fausseresultatDB]
-    if form.validate_on_submit():
-        return flask.render_template("washing.html.jinja2", form=form)
+    reservationForm = WashingMachineReservationForm()
+    if reservationForm.validate_on_submit():
+        # Appel à la database TODO
+        print(reservationForm.data)
+        print(form.data)
+        print(form.machine.data)
+        form.date.data = reservationForm.startDate.data
+        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(reservationForm.startDate.data))
+    elif form.validate_on_submit():
+        print("mais non")
+        print(reservationForm.data)
+        print(form.data)
+        reservationForm.startDate.data = form.date.data
+        reservationForm.endDate.data = form.date.data
+        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data))
     else:
+        print("Rein")
+        print(reservationForm.data)
+        print(form.data)
+        form.machine.data = fausseresultatDB[0]['id']
+        print(form.data)
         form.date.data = date.today()
-        return flask.render_template("washing.html.jinja2", form=form)
+        reservationForm.startDate.data = form.date.data
+        reservationForm.endDate.data = form.date.data
+        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data))
+
+
+def getDayWeek(day):
+    weekday = day.isoweekday()
+    start = day - timedelta(days=weekday-1)
+    dates = [start + timedelta(days=d) for d in range(7)]
+    return dates
 
 
 @app.route('/check', methods=["GET", "POST"])

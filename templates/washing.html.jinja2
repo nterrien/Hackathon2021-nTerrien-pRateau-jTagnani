@@ -28,11 +28,43 @@ Réservation de machine à laver
             <br>
             <button type="submit" class="btn btn-primary mb-2">Voir les disponibilités</button>
         </form>
-        Disponibilité de la machine {{form.machine.data}} la semaine du {{form.date.data}}
-        <div class="hide-smartphone"> Desktop</div>
-        <div class="hide-desktop"> Smartphone</div>
+        <button data-toggle="collapse" class="btn" data-target="#reservation">Reservation</button>
+        <br>
+        <div class="row">
+        <div id="reservation" class="collapse col-md-offset-2 col-md-8 text-center"> 
+            <form action="{{ url_for("washing") }}" method="post">
+                <div class="row">
+                    <div class="col-sm-2">
+                        Début : 
+                    </div>
+                    <div class="col-sm-5">
+                        {{ reservationForm.hidden_tag() }}
+                        {{ reservationForm.startDate(class_="form-control dp") }}
+                    </div>
+                    <div class="col-sm-5">
+                        {{ reservationForm.startHour(class_="form-control") }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Fin : 
+                    </div>
+                    <div class="col-sm-5">
+                        {{ reservationForm.endDate(class_="form-control dp") }}
+                    </div>
+                    <div class="col-sm-5">
+                        {{ reservationForm.endHour(class_="form-control") }}
+                    </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary mb-2">Reserver la machine {{form.machine.data}}</button>
+            </form>
+        </div>
+        </div>
+        {# <div class="hide-smartphone"> Desktop</div>
+        <div class="hide-desktop"> Smartphone {{form.date.data.weekday()}}</div> #}
+        <h3 class="col-12">Disponibilité de la machine {{form.machine.data}} la semaine du {{form.date.data.strftime('%d/%m/%Y')}}</h3>
     </div>
-
         <div class="row">
             <div class="col-md-4">
                 <div class="row">
@@ -46,12 +78,12 @@ Réservation de machine à laver
                         {% endfor %}
                     </div>
                     <div class="col-xs-11 col-sm-11 col-md-4 border"> 
-                        <p class="text-center">Lundi<p>
+                        <p class="text-center">Lundi {{week[0].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                         </div>
                     </div>
                     <div class="col-md-4 hide-smartphone border">
-                        <p class="text-center" >Mardi<p>
+                        <p class="text-center" >Mardi {{week[1].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                         </div>
                     </div>
@@ -60,27 +92,27 @@ Réservation de machine à laver
             <div class="col-md-8 hide-smartphone ">
                 <div class="row">
                     <div class="col-md-2 border"> 
-                        <p class="text-center">Mercredi<p> 
+                        <p class="text-center">Mercredi {{week[2].strftime('%d/%m/%y')}}<p> 
                         <div class="day">
                         </div>
                     </div>
                     <div class="col-md-2 border">
-                        <p class="text-center">Jeudi<p>
+                        <p class="text-center">Jeudi {{week[3].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                         </div>
                     </div>
                     <div class="col-md-2 border">
-                        <p class="text-center">Vendredi<p>
+                        <p class="text-center">Vendredi {{week[4].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                         </div>
                     </div>
                     <div class="col-md-2 border">
-                        <p class="text-center">Samedi<p>
+                        <p class="text-center">Samedi {{week[5].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                         </div>
                     </div>
                     <div class="col-md-2 border">
-                        <p class="text-center">Dimanche<p>
+                        <p class="text-center">Dimanche {{week[6].strftime('%d/%m/%y')}}<p>
                         <div class="day">
                         </div>
                     </div>
