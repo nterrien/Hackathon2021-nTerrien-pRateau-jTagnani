@@ -1,5 +1,5 @@
 from flask import Flask, flash, request, redirect, url_for, make_response, session
-from flask_login import LoginManager
+
 from flask_hashing import Hashing
 from flask_wtf import FlaskForm
 from wtforms import Form, BooleanField, StringField, PasswordField, validators, IntegerField
@@ -90,6 +90,7 @@ def signin():
             session['logged_in'] = True
         else :
             flash('Oups ! Sign in failed, user already exists')
+        session['username'] = username    
         return redirect(url_for('home'))
     else :
         flash('Username must have between 4 and 25 characters')
@@ -117,11 +118,13 @@ def change():
         if form.validate() : 
             result=request.form
             username = session.get('username')
+            print(username)
             user = findUser(username)
-            password = result['password']
-            hashPassword = hashing.hash_value(password, salt='abcd')
-            updateUser (user, username, hashPassword)
-            return flask.render_template("home.html.jinja2")
+            if hashing.check_value(user.password, result['oldPassword'], salt='abcd'):
+                password = result['password']
+                hashPassword = hashing.hash_value(password, salt='abcd')
+                updateUser (user, username, hashPassword)
+                return flask.render_template("home.html.jinja2")
         else :
             flash('Issue')    
     return flask.render_template('changePassword.html.jinja2')
