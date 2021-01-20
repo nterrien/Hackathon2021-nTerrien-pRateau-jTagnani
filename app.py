@@ -1,8 +1,8 @@
 from flask import Flask, flash, request, redirect, url_for, make_response, session
 from flask_login import LoginManager
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField
-from wtforms.validators import DataRequired
+from wtforms import Form, BooleanField, StringField, PasswordField, validators, IntegerField
+from wtforms.validators import DataRequired, EqualTo
 import flask  # BSD License (BSD-3-Clause)
 import os
 import hashlib
@@ -33,11 +33,29 @@ def home():
 # Page de login
 @app.route('/login', methods=['GET', 'POST'])
 def do_admin_login():
-    if request.method == 'POST':
-        if request.form['password'] == 'password' and request.form['username'] == 'admin':
+    form = LoginForm(request.form)
+    if request.method == 'POST' and form.validate():
+        # Bon id/mdp ?
+        result = request.form
+        username = result['username']
+        if findUser(username) == None :
+            flash('wrong username')
+            return flask.render_template("login.html.jinja2")
+        user = findUser(username)
+        password = user.password
+        print (findUser(username).password)
+        passw = result['password']
+        byPassword = passw.encode('utf-8')
+        salt = os.urandom(16)
+        hashPassword = hashlib.pbkdf2_hmac('sha256', byPassword, salt, 100000)
+        print(hashPassword)
+        
+        if passw == password :
+            session['username'] = username
             session['logged_in'] = True
         else:
             flash('wrong password!')
+        print(session.get('username'))    
         return redirect(url_for('home'))
     else :
         return flask.render_template("login.html.jinja2")    
@@ -53,25 +71,66 @@ def logout():
 # signin
 @app.route("/signin", methods=['GET', 'POST'])
 def signin():
-    if request.method == 'POST':
+    form = RegistrationForm(request.form)
+    if request.method == 'POST' and form.validate():
         #Ajout des données dans la bdd
-        session['logged_in'] = True
+        result = request.form
+        username = result['username']
+        password = result['password']
+        
+        # Pour l'instant en clair mais à améliorer : hashage
+        byPassword = password.encode('utf-8')
+        salt = os.urandom(16)
+        hashPassword = hashlib.pbkdf2_hmac('sha256', byPassword, salt, 100000)
+        print(hashPassword)
+        hashPasswor = hashlib.pbkdf2_hmac('sha256', byPassword, salt, 100000)
+        print(hashPasswor)
+        if findUser(username) == None :
+            addUser(username, Password)
+            session['logged_in'] = True
+        else :
+            flash('Oups ! Sign in failed, user already exists')
         return redirect(url_for('home'))
+    else :
+        flash('Username must have between 4 and 25 characters')
     return flask.render_template("signin.html.jinja2")
 
-@app.route("/isSigned",  methods=["POST"])
-def isSigned():
-    result = request.form
-    u = result['username']
-    p = result['password']
-    b = p.encode('utf-8')
-    salt = os.urandom(16)
-    hash = hashlib.pbkdf2_hmac('sha256', b, salt, 100000)
-    if False:
-        session['logged_in']=True
-    else :
-        session['logged_in']=False
-    return flask.url_for('home')
+
+class RegistrationForm(Form):
+    username = StringField('Username', [validators.Length(min=4, max=25)])
+    password = PasswordField('Password', [validators.DataRequired()])
+    
+
+class LoginForm(Form):
+    username = StringField('Username', [validators.Length(min=4, max=25)])
+    password = PasswordField('Password', [validators.DataRequired()])
+
+class ChangePassword(Form):
+    password = PasswordField('New Password', [validators.DataRequired(), EqualTo('confirm', message='Passwords must match')])
+    confirm  = PasswordField('Repeat password')
+
+@app.route('/changePassword', methods=["GET", "POST"])
+def change():
+    form = ChangePassword(request.form)
+    result=request.form
+    if request.method == 'POST':
+        print(result['password'])
+        if form.validate() : 
+            result=request.form
+            
+            username = session.get('username')
+            print(session.get('username'))
+            print(result['password'])
+            user = findUser(username)
+            updateUser (user, username, result['password'])
+            return flask.render_template("home.html.jinja2")
+        else :
+            flash('Issue')    
+    return flask.render_template('changePassword.html.jinja2')
+
+@app.route('/profil', methods=["GET"])
+def profil():
+    return flask.render_template('profil.html.jinja2')    
 
 
 @app.route('/general', methods=["GET", "POST"])
