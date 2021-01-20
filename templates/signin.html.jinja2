@@ -1,17 +1,25 @@
 <link rel="stylesheet" href="../static/css/stylelog.css" type="text/css">
 
-<!doctype html>
-	<html lang="fr">
-		<head>
-			<meta charset="utf-8">
-			<title>Le formulaire</title>
-		</head>
-		<body>
-			<form action="http://localhost:5000/signin" method="post">
-					<label>Username</label> : <input type="text" name="username" />
-					<label>Password</label> : <input type="text" name="password" />
-                    
-					<input type="submit" value="Envoyer" />
-			</form>
-		</body>
-	</html>
+{% block body %} 
+<form action="/signin" method="POST">
+<div class="signin">
+<div class="signin-screen">
+<div class="app-title">
+<h1>Sign in</h1>
+</div>
+<div class="signin-form">
+<div class="control-group">
+				<input type="text" class="signin-field" value="" placeholder="username" name="username">
+<label class="login-field-icon fui-user" for="login-name"></label></div>
+<div class="control-group">
+				<input type="password" class="signin-field" value="" placeholder="password" name="password">
+<label class="login-field-icon fui-lock" for="login-pass"></div>
+<input type="submit" value="Sign in" class="btn btn-primary btn-large btn-block">
+
+</div>
+</div>
+</div>
+</form>
+<br>
+<a href="/login">Already have an account</a>
+{% endblock %}

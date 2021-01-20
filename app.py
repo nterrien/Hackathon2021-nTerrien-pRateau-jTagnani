@@ -30,28 +30,31 @@ def home():
 # Page de login
 @app.route('/login', methods=['GET', 'POST'])
 def do_admin_login():
-    if (request.form['password'] == 'password' and request.form['username'] == 'admin'):
-        session['logged_in'] = True
-    else:
-        flash('wrong password!')
-    return home()
+    if request.method == 'POST':
+        if request.form['password'] == 'password' and request.form['username'] == 'admin':
+            session['logged_in'] = True
+        else:
+            flash('wrong password!')
+        return redirect(url_for('home'))
+    else :
+        return flask.render_template("login.html.jinja2")    
+    #return home()
 
 # logout
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
-    return home()
+    #return home()
+    return redirect(url_for('home'))
 
 # signin
-@app.route("/signin")
+@app.route("/signin", methods=['GET', 'POST'])
 def signin():
-    result = request.form
-    u = result['username']
-    p = result['password']
-    b = p.encode('utf-8')
-    salt = os.urandom(16)
-    hash = hashlib.pbkdf2_hmac('sha256', b, salt, 100000)
-    return flask.render_template('signin.html.jinja2')
+    if request.method == 'POST':
+        #Ajout des données dans la bdd
+        session['logged_in'] = True
+        return redirect(url_for('home'))
+    return flask.render_template("signin.html.jinja2")
 
 @app.route("/isSigned",  methods=["POST"])
 def isSigned():
@@ -67,9 +70,6 @@ def isSigned():
         session['logged_in']=False
     return flask.url_for('home')
 
-class MyForm(FlaskForm):
-    username = StringField('username', validators=[DataRequired()])
-    password = StringField('password', validators=[DataRequired()])
 
 @app.route('/general', methods=["GET", "POST"])
 def general():
