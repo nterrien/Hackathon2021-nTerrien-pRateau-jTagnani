@@ -6,7 +6,6 @@ from datetime import datetime, date, timedelta
 from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
 from forms.washing_machine_form import WashingMachineForm
-from forms.washing_machine_reservation_form import WashingMachineReservationForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.objects.washingMachine import WashingMachine
 from bdd.dbMethods import addUser, findUser, updateUser
@@ -55,25 +54,22 @@ def home():
 @app.route('/washing', methods=["GET", "POST"])
 def washing():
     form = WashingMachineForm(obj=machineList)
-    form.machine.choices = [
+    form.agenda.machine.choices = [
         g.index for g in machineList]
-    reservationForm = WashingMachineReservationForm()
-    if reservationForm.validate_on_submit():
-        machine = findMachine(0)
+    if "reservation" in request.form and form.reservation.validate(form):
+        machine = findMachine(form.agenda.machine.data)
         machine.reserve(datetime.combine(
-            reservationForm.startDate.data, reservationForm.startHour.data))
-        form.date.data = reservationForm.startDate.data
-        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(reservationForm.startDate.data), agenda=getReservationWeek(getDayWeek(form.date.data), machineList[0]))
-    elif form.validate_on_submit():
-        reservationForm.startDate.data = form.date.data
-        reservationForm.endDate.data = form.date.data
-        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data), agenda=getReservationWeek(getDayWeek(form.date.data), machineList[form.machine.data]))
+            form.reservation.startDate.data, form.reservation.startHour.data))
+        form.agenda.date.data = form.reservation.startDate.data
+        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), machineList[form.agenda.machine.data]))
+    elif "agenda" in request.form and form.agenda.validate(form):
+        form.reservation.startDate.data = form.agenda.date.data
+        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), machineList[form.agenda.machine.data]))
     else:
-        form.machine.data = machineList[0].index
-        form.date.data = date.today()
-        reservationForm.startDate.data = form.date.data
-        reservationForm.endDate.data = form.date.data
-        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data), agenda=getReservationWeek(getDayWeek(form.date.data), machineList[form.machine.data]))
+        form.agenda.machine.data = machineList[0].index
+        form.agenda.date.data = date.today()
+        form.reservation.startDate.data = form.agenda.date.data
+        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), machineList[form.agenda.machine.data]))
 
 
 def getDayWeek(day):

@@ -18,52 +18,39 @@ Réservation de machine à laver
         <form action="{{ url_for("washing") }}" method="post">
             <div class="row">
                 <div class="col-md-offset-3 col-sm-3">
-                    {{ form.hidden_tag() }}
-                    {{ form.machine(class_="form-control") }}
+                    {{ form.agenda.hidden_tag() }}
+                    Machine à laver : {{ form.agenda.machine(class_="form-control") }}
                 </div>
                 <div class="col-sm-3">
-                    {{ form.date(class_="form-control dp") }}
+                    Date : {{ form.agenda.date(class_="form-control dp") }}
                 </div>
             </div>
             <br>
-            <button type="submit" class="btn btn-primary mb-2">Voir les disponibilités</button>
+            <button type="submit" name="agenda" class="btn btn-primary mb-2">Voir les disponibilités</button>
+            <br>
+            <a data-toggle="collapse" name="collapse" class="btn" data-target="#reservation">Reservation</a>
+            <div class="row">
+                <div id="reservation" class="col-md-offset-2 col-md-8 text-center"> 
+                        <div class="row">
+                            <div class="col-sm-2">
+                                Début : 
+                            </div>
+                            <div class="col-sm-5">
+                                {{ form.reservation.hidden_tag() }}
+                                {{ form.reservation.startDate(class_="form-control dp") }}
+                            </div>
+                            <div class="col-sm-5">
+                                {{ form.reservation.startHour(class_="form-control") }}
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" name="reservation" class="btn btn-primary mb-2">Reserver la machine pour 45 minutes</button>
+                </div>
+            </div>
         </form>
-        <button data-toggle="collapse" class="btn" data-target="#reservation">Reservation</button>
-        <br>
-        <div class="row">
-        <div id="reservation" class="collapse col-md-offset-2 col-md-8 text-center"> 
-            <form action="{{ url_for("washing") }}" method="post">
-                <div class="row">
-                    <div class="col-sm-2">
-                        Début : 
-                    </div>
-                    <div class="col-sm-5">
-                        {{ reservationForm.hidden_tag() }}
-                        {{ reservationForm.startDate(class_="form-control dp") }}
-                    </div>
-                    <div class="col-sm-5">
-                        {{ reservationForm.startHour(class_="form-control") }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2">
-                        Fin : 
-                    </div>
-                    <div class="col-sm-5">
-                        {{ reservationForm.endDate(class_="form-control dp") }}
-                    </div>
-                    <div class="col-sm-5">
-                        {{ reservationForm.endHour(class_="form-control") }}
-                    </div>
-                </div>
-                <br>
-                <button type="submit" class="btn btn-primary mb-2">Reserver la machine {{form.machine.data}}</button>
-            </form>
-        </div>
-        </div>
         {# <div class="hide-smartphone"> Desktop</div>
         <div class="hide-desktop"> Smartphone {{form.date.data.weekday()}}</div> #}
-        <h3 class="col-12">Disponibilité de la machine {{form.machine.data}} la semaine du {{form.date.data.strftime('%d/%m/%Y')}}</h3>
+        <h3 class="col-12">Disponibilité de la machine {{form.agenda.machine.data}} la semaine du {{form.agenda.date.data.strftime('%d/%m/%Y')}}</h3>
     </div>
         <div class="row">
             <div class="col-md-4">
