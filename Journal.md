@@ -1,6 +1,6 @@
-#Journal de l'avancement du Hackaton
+# Journal de l'avancement du Hackaton
 
-##19/01/2021 12h15
+## 19/01/2021 12h15
 
 Nous avions plusieurs plans concernant l'utilisation d'une API externe :
 Plan A : La CARAE
@@ -30,3 +30,30 @@ Nous avons prévu de faire :
 * Finir l'authentification
 
 
+## 20/01/2021 17h45
+
+Nous avons codé :
+* Coté BDD :
+    * Ajout de la gestion de plusieurs machines
+    * Le code est plus modulaire poru povuoir reserver autre chose que les machines à laver
+    * Ajout de la gestion des salles en BDD
+* L'authentification :
+    * Page de connexion et gestion de la connexion
+* API :
+    * Developpement d'un fausse API connecter avec Grr. Cette API est deployée sur Scalingo
+* FrontEnd Machine à laver:
+    * Les fonctionnalités fonctionnent presque toute. L'affichage est prévu pour les smartphone et le bureau. 
+
+Nous avons prévu de faire :
+* Fonctionnalié manquante frontend :
+    * Faire que le nav soit adapté au mobile
+    * Mettre avant le creneau qui nous appartient (cela demande un peu de travail du coté backend pour enregistrer l'id de la personne qui a pris la reservation)
+    * La page de connexion est pas responsive (c'est trop petit en mode portable)
+    * Toute la reservation de salle
+* Autre :
+    * Verifier si la BDD disparait sur SCALINGO
+    * Deployement automatique sur develop
+* Fonctionnalité manquante backend :
+    * merge l'API
+    * relier l'utilisateur et les réservations
+    * réorganiser le code dans plus de dossiers
