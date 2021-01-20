@@ -45,7 +45,7 @@ class WashingMachine (ReservedObject):
 
     def __init__ (self, id):
         super().__init__(id, BASE_LABEL)
-        self.duration = timedelta(DURATION)
+        self.duration = timedelta(minutes=DURATION)
 
     def reserve (self, dtStart):
         dtEnd = dtStart + self.duration
