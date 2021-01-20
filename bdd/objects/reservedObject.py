@@ -22,7 +22,9 @@ class ReservedObject ():
     def reserve (self, dtStart, dtEnd):
         if self.hasReservation (dtStart, dtEnd):
             print ("déjà réservé")
+            return False
         else :
             addReservation ("automatic reservation", dtStart, dtEnd, self.label)
             print ("réservé !")
+            return True
 
