@@ -1,4 +1,4 @@
-from flask import Flask, flash, request, redirect, url_for, make_response, session
+from flask import Flask, flash, request, redirect, url_for, make_response, session, abort
 import flask  # BSD License (BSD-3-Clause)
 import os
 from werkzeug.utils import secure_filename
@@ -9,6 +9,8 @@ from forms.washing_machine_form import WashingMachineForm
 from forms.washing_machine_reservation_form import WashingMachineReservationForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.objects.washingMachine import WashingMachine
+from bdd.dbMethods import addUser, findUser, updateUser
+
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -17,9 +19,32 @@ app.config.from_object('config')
 
 db.init_app(app)
 
-with app.app_context():
+''' Initialise la base de données et la liste des machines disponibles'''
+
+
+def initApp():
     init_database()
-    machine = WashingMachine("1")
+    global machineList
+    machineList = []
+    for id in range(4):
+        machineList.append(WashingMachine(id))
+
+
+with app.app_context():
+    initApp()
+
+
+''' Trouve la machine correspondant à l'id et renvoie un 404 sinon'''
+
+
+def findMachine(id):
+    id = int(id)
+    l = filter(lambda m: m.index == id, machineList)
+    try:
+        return next(l)
+    except Exception as e:
+        print(e)
+        abort(404)
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -29,27 +54,26 @@ def home():
 
 @app.route('/washing', methods=["GET", "POST"])
 def washing():
-    # Appel à la database TODO
-    fausseresultatDB = [{'id': 1}, {'id': 2}, {'id': 3}, {'id': 4}]
-    form = WashingMachineForm(obj=fausseresultatDB)
-    form.machine.choices = [(g['id']) for g in fausseresultatDB]
+    form = WashingMachineForm(obj=machineList)
+    form.machine.choices = [
+        g.index for g in machineList]
     reservationForm = WashingMachineReservationForm()
     if reservationForm.validate_on_submit():
-        # TODO choix e la machine avec form.machine.data
+        machine = findMachine(0)
         machine.reserve(datetime.combine(
             reservationForm.startDate.data, reservationForm.startHour.data))
         form.date.data = reservationForm.startDate.data
-        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(reservationForm.startDate.data), agenda=getReservationWeek(getDayWeek(form.date.data), machine))
+        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(reservationForm.startDate.data), agenda=getReservationWeek(getDayWeek(form.date.data), machineList[0]))
     elif form.validate_on_submit():
         reservationForm.startDate.data = form.date.data
         reservationForm.endDate.data = form.date.data
-        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data), agenda=getReservationWeek(getDayWeek(form.date.data), machine))
+        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data), agenda=getReservationWeek(getDayWeek(form.date.data), machineList[form.machine.data]))
     else:
-        form.machine.data = fausseresultatDB[0]['id']
+        form.machine.data = machineList[0].index
         form.date.data = date.today()
         reservationForm.startDate.data = form.date.data
         reservationForm.endDate.data = form.date.data
-        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data), agenda=getReservationWeek(getDayWeek(form.date.data), machine))
+        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data), agenda=getReservationWeek(getDayWeek(form.date.data), machineList[form.machine.data]))
 
 
 def getDayWeek(day):
@@ -61,6 +85,8 @@ def getDayWeek(day):
 # Les donner retourner sont une liste avec chaque element qui correspond à un jour de la semaine
 # Chaque jour est une liste de reservations composé de le % de la journée que represente cette reservation, le nom du reservant, l'heure de debut, l'heure de fin.
 # Si None est le nom du reservant cela signifie que c'est une reservation vide utilisé pour faire des trous dans l'afficahge en HTML
+
+
 def getReservationWeek(week, machine):
     agenda = []
     for day in week:
@@ -85,21 +111,66 @@ def timeToMinutes(time):
     return time.hour*60+time.minute
 
 
-@ app.route('/check', methods=["GET", "POST"])
-def check():
+@app.route('/reset', methods=["GET", "POST"])
+def reset():
+    ''' Sur ce endpoint, on reset la base de données'''
+    clear_database()
+    initApp()
+    return flask.render_template("home.html.jinja2")
+
+# Pages pour montrer le fonctionnement de WashingMachine
+
+
+@app.route('/machine/findAll', methods=["GET", "POST"])
+def findAllMachines():
+    ''' Imprime la liste des machines à laver (ce sont des objet dons pas beaux...)
+    Nicolas si besoin tu devrais pouvoir avoir leur nom avec machine.label et leur index avec machine.index'''
+    print(machineList)
+    return flask.render_template("home.html.jinja2")
+
+
+@app.route('/machine/<id>/check', methods=["GET", "POST"])
+def check(id):
+    ''' Accède à la machine id et regarde les réservations sur une journée à passer en paramètre (type date)'''
+    machine = findMachine(id)
     print(machine.checkDate(date.today()))
     return flask.render_template("home.html.jinja2")
 
 
-@ app.route('/findAll', methods=["GET", "POST"])
-def find():
+@app.route('/machine/<id>/findAll', methods=["GET", "POST"])
+def findAllReservations(id):
+    ''' Accède à la machine id et regarde les réservations de tous les temps'''
+    machine = findMachine(id)
     print(machine.findAll())
     return flask.render_template("home.html.jinja2")
 
 
-@ app.route('/reserve', methods=["GET", "POST"])
-def reserve():
+@app.route('/machine/<id>/reserve', methods=["GET", "POST"])
+def reserve(id):
+    ''' réserve la machine pour un créneau d'une durée prédéfinie pour une horodate '''
+    machine = findMachine(id)
     machine.reserve(datetime.today())
+    return flask.render_template("home.html.jinja2")
+
+# Pages pour montrer le fonctionnement de User
+
+
+@app.route('/user/create', methods=["GET", "POST"])
+def create():
+    addUser("admin", "password")
+    return flask.render_template("home.html.jinja2")
+
+
+@app.route('/user/find', methods=["GET", "POST"])
+def find():
+    print(findUser("admin"))
+    return flask.render_template("home.html.jinja2")
+
+
+@app.route('/user/update', methods=["GET", "POST"])
+def update():
+    user = findUser("admin")
+    updateUser(user, "admin2", "new password")
     return flask.render_template("home.html.jinja2")
 
 

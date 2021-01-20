@@ -12,3 +12,9 @@ class Reservation (db.Model):
 class ReservedObject (db.Model):
     __tablename__ = "reservedObject"
     label = db.Column(db.Text, primary_key=True)
+
+
+class User (db.Model):
+    __tablename__ = "user"
+    username = db.Column(db.Text, primary_key=True)
+    password = db.Column(db.Text)

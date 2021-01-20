@@ -1,5 +1,5 @@
 from bdd.database import db
-from bdd.models import Reservation, ReservedObject
+from bdd.models import Reservation, ReservedObject, User
 
 
 
@@ -15,7 +15,7 @@ def addReservation (name, start, end, label):
         db.session.rollback()
 
 def addReservedObject (label):
-    object = ReservedObject(label=label)
+    object = ReservedObject (label=label)
     db.session.add (object)
     try :
         db.session.commit()
@@ -23,6 +23,17 @@ def addReservedObject (label):
         print("[1] Je ne peux pas ajouter d'object à réserver "
                 "a cause de : %s" % e)
         db.session.rollback()
+
+def addUser (username, password):
+    user = User (username=username, password=password)
+    db.session.add (user)
+    try :
+        db.session.commit()
+    except Exception as e:
+        print("[1] Je ne peux pas ajouter d'utilisateur "
+                "a cause de : %s" % e)
+        db.session.rollback()
+
 
 ## Read
 def findReservation (id):
@@ -32,10 +43,14 @@ def findAllReservation ():
     return Reservation.query.all()
 
 def findAllReservationByObject (object):
-    return Reservation.query.filter_by(object = object).all()
+    return Reservation.query.filter_by(object = object).order_by(Reservation.start).all()
 
 def findAllReservationByObjectAndByTime (object, timeStart, timeEnd):
-    return Reservation.query.filter_by(object = object).filter(Reservation.end > timeStart, Reservation.start < timeEnd).all()
+    return Reservation.query.filter_by(object = object).filter(Reservation.end > timeStart, Reservation.start < timeEnd).order_by(Reservation.start).all()
+
+def findUser (username):
+    return User.query.filter_by(username = username).first()
+
 
 ## Update
 def updateReservation (id, name, start, end):
@@ -50,6 +65,15 @@ def updateReservation (id, name, start, end):
                 "a cause de : %s" % e)
         db.session.rollback()
 
+def updateUser (user, username, password):
+    user.username = username
+    user.password = password
+    try :
+        db.session.commit()
+    except Exception as e:
+        print("[1] Je ne peux pas update un Utilisateur "
+                "a cause de : %s" % e)
+        db.session.rollback()
 
 
 ## Delete

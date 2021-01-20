@@ -4,7 +4,8 @@ from datetime import date, time, datetime, timedelta
 class WashingMachine ():
 
     def __init__ (self, id):
-        self.label = "WashingMachine_" + id
+        self.index = id
+        self.label = "WashingMachine_" + str(id)
         self.duration = timedelta(minutes=45)
         addReservedObject (self.label)
 
