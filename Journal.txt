@@ -1,0 +1,5 @@
+je stocke et regarde l'utilisateur en bdd
+table utilisateur avec :
+- mdp
+- nom (unique)
+- 
