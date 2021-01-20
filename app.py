@@ -45,22 +45,21 @@ def washing():
         datetimeStart = datetime.combine(
             form.reservation.startDate.data, form.reservation.startHour.data)
         success = machine.reserve(datetimeStart)
-        print(success)
         if success == False:
             flash("Le créneau " + str(form.reservation.startHour.data.strftime('%H:%M')) +
                   ' - ' + str((datetimeStart + machine.duration).time().strftime('%H:%M')) + " de la machine " + str(form.agenda.machine.data) + " est déjà pris.", "warning")
         else:
             flash("Le créneau a bien été reservé.", "success", )
         form.agenda.date.data = form.reservation.startDate.data
-        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), getMachineList()[form.agenda.machine.data]))
+        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findMachineWith404(form.agenda.machine.data)))
     elif "agenda" in request.form and form.agenda.validate(form):
         form.reservation.startDate.data = form.agenda.date.data
-        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), getMachineList()[form.agenda.machine.data]))
+        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findMachineWith404(form.agenda.machine.data)))
     else:
         form.agenda.machine.data = getMachineList()[0].index
         form.agenda.date.data = date.today()
         form.reservation.startDate.data = form.agenda.date.data
-        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), getMachineList()[form.agenda.machine.data]))
+        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findMachineWith404(form.agenda.machine.data)))
 
 
 def getDayWeek(day):
