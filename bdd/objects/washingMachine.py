@@ -40,6 +40,7 @@ def findMachineWith404 (id):
 def getMachineList ():
     return machineList
 
+
 class WashingMachine (ReservedObject):
 
     def __init__ (self, id):
@@ -48,4 +49,4 @@ class WashingMachine (ReservedObject):
 
     def reserve (self, dtStart):
         dtEnd = dtStart + self.duration
-        super().reserve (dtStart, dtEnd)
+        return super().reserve (dtStart, dtEnd)
