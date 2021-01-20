@@ -17,7 +17,7 @@
 
 .day {
     min-height: 375px;
-    height: 75vh;
+    height: 96vh;
     margin: 0;
     padding: 0;
 }
@@ -27,6 +27,6 @@
 }
 
 .hour {
-    height: 6.25vh;
+    height: 8vh;
     text-align: right;
 }

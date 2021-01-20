@@ -80,11 +80,31 @@ Réservation de machine à laver
                     <div class="col-xs-11 col-sm-11 col-md-4 border"> 
                         <p class="text-center">Lundi {{week[0].strftime('%d/%m/%y')}}<p>
                         <div class="day">
+                            {% for reservation in agenda[0]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="col-md-4 hide-smartphone border">
                         <p class="text-center" >Mardi {{week[1].strftime('%d/%m/%y')}}<p>
                         <div class="day">
+                            {% for reservation in agenda[1]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -94,26 +114,76 @@ Réservation de machine à laver
                     <div class="col-md-2 border"> 
                         <p class="text-center">Mercredi {{week[2].strftime('%d/%m/%y')}}<p> 
                         <div class="day">
+                            {% for reservation in agenda[2]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="col-md-2 border">
                         <p class="text-center">Jeudi {{week[3].strftime('%d/%m/%y')}}<p>
                         <div class="day">
+                            {% for reservation in agenda[3]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="col-md-2 border">
                         <p class="text-center">Vendredi {{week[4].strftime('%d/%m/%y')}}<p>
                         <div class="day">
+                            {% for reservation in agenda[4]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="col-md-2 border">
                         <p class="text-center">Samedi {{week[5].strftime('%d/%m/%y')}}<p>
                         <div class="day">
+                            {% for reservation in agenda[5]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="col-md-2 border">
                         <p class="text-center">Dimanche {{week[6].strftime('%d/%m/%y')}}<p>
                         <div class="day">
+                            {% for reservation in agenda[6]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    <div class="border text-center" style="height:{{reservation[0]}}%">
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

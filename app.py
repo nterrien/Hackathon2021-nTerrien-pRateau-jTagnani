@@ -10,9 +10,6 @@ from forms.washing_machine_reservation_form import WashingMachineReservationForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.objects.washingMachine import WashingMachine
 
-washingmachineWithoutDB = [{'name': "1"}, {
-    'name': "2"}, {'name': "3"}, {'name': "4"}]
-
 app = Flask(__name__)
 Bootstrap(app)
 datepicker(app)
@@ -38,29 +35,21 @@ def washing():
     form.machine.choices = [(g['id']) for g in fausseresultatDB]
     reservationForm = WashingMachineReservationForm()
     if reservationForm.validate_on_submit():
-        # Appel à la database TODO
-        print(reservationForm.data)
-        print(form.data)
-        print(form.machine.data)
+        # TODO choix e la machine avec form.machine.data
+        machine.reserve(datetime.combine(
+            reservationForm.startDate.data, reservationForm.startHour.data))
         form.date.data = reservationForm.startDate.data
-        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(reservationForm.startDate.data))
+        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(reservationForm.startDate.data), agenda=getReservationWeek(getDayWeek(form.date.data), machine))
     elif form.validate_on_submit():
-        print("mais non")
-        print(reservationForm.data)
-        print(form.data)
         reservationForm.startDate.data = form.date.data
         reservationForm.endDate.data = form.date.data
-        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data))
+        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data), agenda=getReservationWeek(getDayWeek(form.date.data), machine))
     else:
-        print("Rein")
-        print(reservationForm.data)
-        print(form.data)
         form.machine.data = fausseresultatDB[0]['id']
-        print(form.data)
         form.date.data = date.today()
         reservationForm.startDate.data = form.date.data
         reservationForm.endDate.data = form.date.data
-        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data))
+        return flask.render_template("washing.html.jinja2", form=form, reservationForm=reservationForm, week=getDayWeek(form.date.data), agenda=getReservationWeek(getDayWeek(form.date.data), machine))
 
 
 def getDayWeek(day):
@@ -69,26 +58,52 @@ def getDayWeek(day):
     dates = [start + timedelta(days=d) for d in range(7)]
     return dates
 
+# Les donner retourner sont une liste avec chaque element qui correspond à un jour de la semaine
+# Chaque jour est une liste de reservations composé de le % de la journée que represente cette reservation, le nom du reservant, l'heure de debut, l'heure de fin.
+# Si None est le nom du reservant cela signifie que c'est une reservation vide utilisé pour faire des trous dans l'afficahge en HTML
+def getReservationWeek(week, machine):
+    agenda = []
+    for day in week:
+        reservations = machine.checkDate(day)
+        dayAgenda = []
+        for reservation in reservations:
+            dayAgenda.append([100*((timeToMinutes(reservation.end)-timeToMinutes(reservation.start))/(24*60)),
+                              reservation.name, reservation.start.time(), reservation.end.time()])
+        current = 0
+        schedule = []
+        for reservation in dayAgenda:
+            if (reservation[0] != current):
+                schedule.append(
+                    [100*(timeToMinutes(reservation[2]) - current)/(24*60), None, None, None])
+            schedule.append(reservation)
+            current = timeToMinutes(reservation[3])
+        agenda.append(schedule)
+    return agenda
 
-@app.route('/check', methods=["GET", "POST"])
+
+def timeToMinutes(time):
+    return time.hour*60+time.minute
+
+
+@ app.route('/check', methods=["GET", "POST"])
 def check():
     print(machine.checkDate(date.today()))
     return flask.render_template("home.html.jinja2")
 
 
-@app.route('/findAll', methods=["GET", "POST"])
+@ app.route('/findAll', methods=["GET", "POST"])
 def find():
     print(machine.findAll())
     return flask.render_template("home.html.jinja2")
 
 
-@app.route('/reserve', methods=["GET", "POST"])
+@ app.route('/reserve', methods=["GET", "POST"])
 def reserve():
     machine.reserve(datetime.today())
     return flask.render_template("home.html.jinja2")
 
 
-@app.errorhandler(404)
+@ app.errorhandler(404)
 def not_found(e):
     return flask.render_template("404.html.jinja2"), 404
 
