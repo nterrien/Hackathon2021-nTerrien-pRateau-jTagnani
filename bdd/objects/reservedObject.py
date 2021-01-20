@@ -25,6 +25,6 @@ class ReservedObject ():
             return False
         else :
             addReservation ("automatic reservation", dtStart, dtEnd, self.label)
-            print ("réservé !")
+            print ("réservé de " + dtStart.strftime("%d-%b-%Y (%H:%M:%S.%f)") + " à " + dtEnd.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
             return True
 
