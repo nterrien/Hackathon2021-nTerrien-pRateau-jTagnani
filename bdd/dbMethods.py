@@ -75,6 +75,10 @@ def updateUser (user, username, password):
                 "a cause de : %s" % e)
         db.session.rollback()
 
+def updateUsername(user, username):
+    password = user.password
+    updateUser(user, username, password)
+
 
 ## Delete
 def deleteReservation (id):
