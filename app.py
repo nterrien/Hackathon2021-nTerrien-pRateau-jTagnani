@@ -7,8 +7,8 @@ from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
 from forms.washing_machine_form import WashingMachineForm
 from bdd.database import db, init_database, populate_database, clear_database
-from bdd.objects.washingMachine import machineList, initWashingMachineList, findMachineWith404
-from bdd.objects.room import roomList, initRoomList
+from bdd.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
+from bdd.objects.room import roomList, initRoomList, findRoomWith404
 from bdd.dbMethods import addUser, findUser, updateUser
 
 
@@ -38,8 +38,8 @@ def home():
 
 @app.route('/washing', methods=["GET", "POST"])
 def washing():
-    form = WashingMachineForm(obj=machineList)
-    form.agenda.machine.choices = [g.index for g in machineList]
+    form = WashingMachineForm(obj=getMachineList())
+    form.agenda.machine.choices = [g.index for g in getMachineList()]
     if "reservation" in request.form and form.reservation.validate(form):
         machine = findMachineWith404(form.agenda.machine.data)
         datetimeStart = datetime.combine(
@@ -52,15 +52,15 @@ def washing():
         else:
             flash("Le créneau a bien été reservé.", "success", )
         form.agenda.date.data = form.reservation.startDate.data
-        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), machineList[form.agenda.machine.data]))
+        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), getMachineList()[form.agenda.machine.data]))
     elif "agenda" in request.form and form.agenda.validate(form):
         form.reservation.startDate.data = form.agenda.date.data
-        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), machineList[form.agenda.machine.data]))
+        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), getMachineList()[form.agenda.machine.data]))
     else:
-        form.agenda.machine.data = machineList[0].index
+        form.agenda.machine.data = getMachineList()[0].index
         form.agenda.date.data = date.today()
         form.reservation.startDate.data = form.agenda.date.data
-        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), machineList[form.agenda.machine.data]))
+        return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), getMachineList()[form.agenda.machine.data]))
 
 
 def getDayWeek(day):
@@ -110,9 +110,7 @@ def reset():
 
 @app.route('/machine/findAll', methods=["GET", "POST"])
 def findAllMachines():
-    ''' Imprime la liste des machines à laver (ce sont des objet dons pas beaux...)
-    Nicolas si besoin tu devrais pouvoir avoir leur nom avec machine.label et leur index avec machine.index'''
-    print(machineList)
+    print (getMachineList())
     return flask.render_template("home.html.jinja2")
 
 

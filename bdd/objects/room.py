@@ -26,7 +26,7 @@ def findRoom (id):
     l = filter (lambda r : r.index == id, roomList)
     return next(l)
 
-def findMachineWith404 (id):
+def findRoomWith404 (id):
     ''' Trouve la salle correspondant à l'id et renvoie un 404 si non trouvée'''
     try :
         return findRoom (id)

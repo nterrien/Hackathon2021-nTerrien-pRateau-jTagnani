@@ -15,7 +15,7 @@ def initWashingMachineList ():
         machineList.append (WashingMachine (id))
 
 def addWashingMachine (id):
-    ''' Ajoute une machine à laver à la liste et la renvoie. Renvois la machine correspondante si elle existe déjà'''
+    ''' Ajoute une machine à laver à la liste et la renvoie. Renvoie la machine correspondante si elle existe déjà'''
     try :
         return findMachine (id)
     except Exception as e:
@@ -37,6 +37,8 @@ def findMachineWith404 (id):
         print(e)
         abort(404)
 
+def getMachineList ():
+    return machineList
 
 class WashingMachine (ReservedObject):
 
