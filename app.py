@@ -1,9 +1,9 @@
-from flask import Flask, flash, request, redirect, url_for, make_response, session, abort
+from flask import Flask, flash, request, redirect, url_for, make_response, session
 import flask  # BSD License (BSD-3-Clause)
 import os
 from werkzeug.utils import secure_filename
 from bdd.database import db, init_database, populate_database, clear_database
-from bdd.objects.washingMachine import WashingMachine
+from bdd.objects.washingMachine import machineList, initWashingMachineList, findMachineWith404
 from bdd.dbMethods import addUser, findUser, updateUser
 from datetime import datetime, date
 
@@ -16,25 +16,14 @@ db.init_app(app)
 ''' Initialise la base de données et la liste des machines disponibles'''
 def initApp ():
     init_database()
-    global machineList
-    machineList = []
-    for id in range (4):
-        machineList.append (WashingMachine (id))
+    initWashingMachineList ()
 
 
 with app.app_context():
     initApp ()
 
 
-''' Trouve la machine correspondant à l'id et renvoie un 404 sinon'''
-def findMachine (id):
-    id = int (id)
-    l = filter (lambda m : m.index == id, machineList)
-    try :
-        return next(l)
-    except Exception as e:
-        print(e)
-        abort(404)
+
 
 @app.route('/', methods=["GET", "POST"])
 def home():
@@ -58,21 +47,21 @@ def findAllMachines():
 ''' Accède à la machine id et regarde les réservations sur une journée à passer en paramètre (type date)'''
 @app.route('/machine/<id>/check', methods=["GET", "POST"])
 def check(id):
-    machine = findMachine (id)
+    machine = findMachineWith404 (id)
     print (machine.checkDate(date.today()))
     return flask.render_template("home.html.jinja2")
 
-''' Accède à la machine id et regarde les réservations de tous les tempss '''
+''' Accède à la machine id et regarde les réservations de tous les temps '''
 @app.route('/machine/<id>/findAll', methods=["GET", "POST"])
 def findAllReservations(id):
-    machine = findMachine (id)
+    machine = findMachineWith404 (id)
     print (machine.findAll())
     return flask.render_template("home.html.jinja2")
 
 ''' réserve la machine pour un créneau d'une durée prédéfinie pour une horodate '''
 @app.route('/machine/<id>/reserve', methods=["GET", "POST"])
 def reserve(id):
-    machine = findMachine (id)
+    machine = findMachineWith404 (id)
     machine.reserve(datetime.today())
     return flask.render_template("home.html.jinja2")
 
