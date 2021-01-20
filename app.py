@@ -3,7 +3,7 @@ import flask  # BSD License (BSD-3-Clause)
 import os
 from werkzeug.utils import secure_filename
 from bdd.database import db, init_database, populate_database, clear_database
-from bdd.objects.washingMachine import machineList, initWashingMachineList, findMachineWith404
+from bdd.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
 from bdd.objects.room import roomList, initRoomList, findRoomWith404
 from bdd.dbMethods import addUser, findUser, updateUser
 from datetime import datetime, date
@@ -43,7 +43,7 @@ def reset():
     Nicolas si besoin tu devrais pouvoir avoir leur nom avec machine.label et leur index avec machine.index'''
 @app.route('/machine/findAll', methods=["GET", "POST"])
 def findAllMachines():
-    print (machineList)
+    print (getMachineList())
     return flask.render_template("home.html.jinja2")
 
 ''' Accède à la machine id et regarde les réservations sur une journée à passer en paramètre (type date)'''
