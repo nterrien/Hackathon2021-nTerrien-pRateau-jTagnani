@@ -18,10 +18,9 @@ app.config.from_object('config')
 
 db.init_app(app)
 
-''' Initialise la base de données et la liste des machines disponibles'''
-
 
 def initApp():
+    ''' Initialise la base de données et la liste des machines disponibles'''
     init_database()
     global machineList
     machineList = []
@@ -33,10 +32,8 @@ with app.app_context():
     initApp()
 
 
-''' Trouve la machine correspondant à l'id et renvoie un 404 sinon'''
-
-
 def findMachine(id):
+    ''' Trouve la machine correspondant à l'id et renvoie un 404 sinon'''
     id = int(id)
     l = filter(lambda m: m.index == id, machineList)
     try:
@@ -54,12 +51,17 @@ def home():
 @app.route('/washing', methods=["GET", "POST"])
 def washing():
     form = WashingMachineForm(obj=machineList)
-    form.agenda.machine.choices = [
-        g.index for g in machineList]
+    form.agenda.machine.choices = [g.index for g in machineList]
     if "reservation" in request.form and form.reservation.validate(form):
         machine = findMachine(form.agenda.machine.data)
-        machine.reserve(datetime.combine(
-            form.reservation.startDate.data, form.reservation.startHour.data))
+        datetimeStart = datetime.combine(
+            form.reservation.startDate.data, form.reservation.startHour.data)
+        success = machine.reserve(datetimeStart)
+        print(success)
+        if success == None:
+            flash("Le créneau " + str(form.reservation.startHour.data.strftime('%H:%M')) +
+                  ' - ' + str((datetimeStart + machine.duration).time().strftime('%H:%M')) + " de la machine " + str(form.agenda.machine.data) + " est déjà pris.", "warning")
+        flash("Le créneau a bien été reservé.", "success", )
         form.agenda.date.data = form.reservation.startDate.data
         return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), machineList[form.agenda.machine.data]))
     elif "agenda" in request.form and form.agenda.validate(form):
