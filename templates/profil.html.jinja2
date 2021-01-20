@@ -6,19 +6,20 @@
 
 {% block content %}
 <center>
-<br>
-<div class="text">{{username}} ne te plait plus ? Tu peux changer de nom (il faut entre 4 et 25 charactères) :</div>
-<br>
-<form action="/profil" method="POST">
-<div class="usernameForm-form">
-				<input type="text" class="username-field" value="" placeholder="Nouveau nom d'utilisateur" name="username">
-<label class="login-field-icon fui-lock" for="login-pass"></div>
-<br>
-<input type="submit" value="Change username" class="btn btn-primary">
-</form>
-<br>
-<div class="text">Tu veux changer de mot de passe {{username}} :</div>
-<br>
-<a href="/changePassword">Modify password</a>
+    <br>
+    <div class="text">{{username}} ne te plait plus ? Tu peux changer de nom (il faut entre 4 et 25 charactères) :</div>
+    <br>
+    <form action="/profil" method="POST">
+        <div class="usernameForm-form">
+            <input type="text" class="username-field" value="" placeholder="Nouveau nom d'utilisateur" name="username">
+            <label class="login-field-icon fui-lock" for="login-pass">
+        </div>
+        <br>
+        <input type="submit" value="Change username" class="btn btn-primary">
+    </form>
+    <br>
+    <div class="text">Tu veux changer de mot de passe {{username}} :</div>
+    <br>
+    <a href="/changePassword">Modify password</a>
 </center>
 {% endblock %}
