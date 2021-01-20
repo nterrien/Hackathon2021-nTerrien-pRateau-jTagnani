@@ -8,7 +8,7 @@ from flask_datepicker import datepicker
 from forms.washing_machine_form import WashingMachineForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.objects.washingMachine import machineList, initWashingMachineList, findMachineWith404
-from bdd.objects.room import roomList, initRoomList, findRoomWith404
+from bdd.objects.room import roomList, initRoomList
 from bdd.dbMethods import addUser, findUser, updateUser
 
 
@@ -46,10 +46,11 @@ def washing():
             form.reservation.startDate.data, form.reservation.startHour.data)
         success = machine.reserve(datetimeStart)
         print(success)
-        if success == None:
+        if success == False:
             flash("Le créneau " + str(form.reservation.startHour.data.strftime('%H:%M')) +
                   ' - ' + str((datetimeStart + machine.duration).time().strftime('%H:%M')) + " de la machine " + str(form.agenda.machine.data) + " est déjà pris.", "warning")
-        flash("Le créneau a bien été reservé.", "success", )
+        else:
+            flash("Le créneau a bien été reservé.", "success", )
         form.agenda.date.data = form.reservation.startDate.data
         return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), machineList[form.agenda.machine.data]))
     elif "agenda" in request.form and form.agenda.validate(form):
