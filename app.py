@@ -93,7 +93,7 @@ def signin():
         hashPasswor = hashlib.pbkdf2_hmac('sha256', byPassword, salt, 100000)
         print(hashPasswor)
         if findUser(username) == None :
-            addUser(username, Password)
+            addUser(username, password)
             session['logged_in'] = True
         else :
             flash('Oups ! Sign in failed, user already exists')
