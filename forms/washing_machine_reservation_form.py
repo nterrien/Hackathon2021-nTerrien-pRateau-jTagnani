@@ -8,6 +8,6 @@ from wtforms import validators
 
 
 class WashingMachineReservationForm(FlaskForm):
-    startDate = DateField("Jour : ", [
+    startDate = DateField("Jour de reservation ", [
         validators.DataRequired()], format="%d/%m/%Y")
-    startHour = TimeField("Heure de début")
+    startHour = TimeField("Heure de début (format HH:MM)")
