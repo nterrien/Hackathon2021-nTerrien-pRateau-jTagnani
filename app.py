@@ -1,5 +1,6 @@
 from flask import Flask, flash, request, redirect, url_for, make_response, session
 from flask_login import LoginManager
+from flask_hashing import Hashing
 from flask_wtf import FlaskForm
 from wtforms import Form, BooleanField, StringField, PasswordField, validators, IntegerField
 from wtforms.validators import DataRequired, EqualTo
@@ -14,6 +15,7 @@ from datetime import datetime, date
 
 
 app = Flask(__name__)
+hashing = Hashing(app)
 app.config.from_object('config')
 
 db.init_app(app)
@@ -49,16 +51,11 @@ def do_admin_login():
             flash('wrong username')
             return flask.render_template("login.html.jinja2")
         user = findUser(username)
-        password = user.password
-        print (findUser(username).password)
-        passw = result['password']
-        byPassword = passw.encode('utf-8')
-        salt = os.urandom(16)
-        hashPassword = hashlib.pbkdf2_hmac('sha256', byPassword, salt, 100000)
-        print(hashPassword)
-        
-        if passw == password :
+        hashPassword = user.password
+        passw = result['password']   
+        if hashing.check_value(hashPassword, passw, salt='abcd'): 
             session['username'] = username
+            print(session['username'])
             session['logged_in'] = True
         else:
             flash('wrong password!')
@@ -86,14 +83,10 @@ def signin():
         password = result['password']
         
         # Pour l'instant en clair mais à améliorer : hashage
-        byPassword = password.encode('utf-8')
-        salt = os.urandom(16)
-        hashPassword = hashlib.pbkdf2_hmac('sha256', byPassword, salt, 100000)
-        print(hashPassword)
-        hashPasswor = hashlib.pbkdf2_hmac('sha256', byPassword, salt, 100000)
-        print(hashPasswor)
+        hashPassword = hashing.hash_value(password, salt='abcd')
         if findUser(username) == None :
-            addUser(username, password)
+            addUser(username, hashPassword)
+            print(hashPassword)
             session['logged_in'] = True
         else :
             flash('Oups ! Sign in failed, user already exists')
@@ -121,15 +114,13 @@ def change():
     form = ChangePassword(request.form)
     result=request.form
     if request.method == 'POST':
-        print(result['password'])
         if form.validate() : 
             result=request.form
-            
             username = session.get('username')
-            print(session.get('username'))
-            print(result['password'])
             user = findUser(username)
-            updateUser (user, username, result['password'])
+            password = result['password']
+            hashPassword = hashing.hash_value(password, salt='abcd')
+            updateUser (user, username, hashPassword)
             return flask.render_template("home.html.jinja2")
         else :
             flash('Issue')    
