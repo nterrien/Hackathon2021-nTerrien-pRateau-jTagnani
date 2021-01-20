@@ -123,6 +123,8 @@ class UsernameForm(Form):
 
 @app.route('/changePassword', methods=["GET", "POST"])
 def change():
+    if not session.get('logged_in'):
+        return flask.render_template('login.html.jinja2')
     form = ChangePassword(request.form)
     result=request.form
     if request.method == 'POST':
@@ -142,6 +144,8 @@ def change():
 
 @app.route('/profil', methods=["GET", "POST"])
 def profil():
+    if not session.get('logged_in'):
+        return flask.render_template('login.html.jinja2')
     form = UsernameForm(request.form)
     if request.method == 'POST' and form.validate():
         result=request.form
