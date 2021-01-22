@@ -1,16 +1,16 @@
-from flask import Flask, flash, request, redirect, url_for, make_response, session
+from flask import Flask, flash, request, redirect, url_for, make_response, session, render_template
 from flask_hashing import Hashing
-import flask  # BSD License (BSD-3-Clause)
-import os
+from os import urandom, environ
 from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
+from datetime import datetime, timedelta
+
 from forms.login_forms import RegistrationForm, ChangePassword, UsernameForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.dbMethods import addUser, findUser, updateUser, updateUsername
 from reservation.reservation import reservation_general, getReservationWeek
 from utils.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
 from utils.objects.room import getRoomList, initRoomList, findRoomWith404
-from datetime import datetime, timedelta
 from utils.timeConversion import timeToMinutes, getDayWeek
 
 app = Flask(__name__)
@@ -39,18 +39,18 @@ with app.app_context():
 def home():
     user = None
     if not session.get('logged_in'):
-        return flask.render_template('login.html.jinja2')
+        return render_template('login.html.jinja2')
     else:
         username = None
         if session.get('username') != None:
             username = session.get('username')
-        return flask.render_template("home.html.jinja2", username=username)
+        return render_template("home.html.jinja2", username=username)
 
 # Page de login
 @app.route('/login', methods=['GET', 'POST'])
 def do_admin_login():
     if request.method == 'GET':
-        return flask.render_template("login.html.jinja2")
+        return render_template("login.html.jinja2")
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         # Bon id/mdp ?
@@ -58,7 +58,7 @@ def do_admin_login():
         username = result['username']
         if findUser(username) == None:
             flash('wrong username')
-            return flask.render_template("login.html.jinja2")
+            return render_template("login.html.jinja2")
         user = findUser(username)
         hashPassword = user.password
         passw = result['password']
@@ -68,7 +68,7 @@ def do_admin_login():
         else:
             flash('wrong password!')
         return redirect(url_for('home'))
-    return flask.render_template("login.html.jinja2")
+    return render_template("login.html.jinja2")
 
 # logout
 @app.route("/logout")
@@ -96,13 +96,13 @@ def signin():
             flash('Oups ! Sign in failed, user already exists')
         session['username'] = username
         return redirect(url_for('do_admin_login'))
-    return flask.render_template("signin.html.jinja2")
+    return render_template("signin.html.jinja2")
 
 
 @app.route('/changePassword', methods=["GET", "POST"])
 def change():
     if not session.get('logged_in'):
-        return flask.render_template('login.html.jinja2')
+        return render_template('login.html.jinja2')
     form = ChangePassword(request.form)
     result = request.form
     if request.method == 'POST':
@@ -115,16 +115,16 @@ def change():
                 password = result['password']
                 hashPassword = hashing.hash_value(password, salt='abcd')
                 updateUser(user, username, hashPassword)
-                return flask.render_template("home.html.jinja2")
+                return render_template("home.html.jinja2")
         else:
             flash('Issue')
-    return flask.render_template('changePassword.html.jinja2')
+    return render_template('changePassword.html.jinja2')
 
 
 @app.route('/profil', methods=["GET", "POST"])
 def profil():
     if not session.get('logged_in'):
-        return flask.render_template('login.html.jinja2')
+        return render_template('login.html.jinja2')
     form = UsernameForm(request.form)
     if request.method == 'POST' and form.validate():
         result = request.form
@@ -137,14 +137,14 @@ def profil():
     if 'username' in session:
         username = None
         username = session.get('username')
-        return flask.render_template('profil.html.jinja2', username=username)
+        return render_template('profil.html.jinja2', username=username)
 
 
 # Page de reservation des machines à laver
 @app.route('/washing', methods=["GET", "POST"])
 def washing():
     if not session.get('logged_in'):
-        return flask.render_template('login.html.jinja2')
+        return render_template('login.html.jinja2')
     def reserve_washingmachine(form):
         machine = findMachineWith404(form.agenda.reservable.data)
         datetimeStart = datetime.combine(
@@ -162,6 +162,8 @@ def washing():
 # Page de reservation des salles
 @app.route('/room', methods=["GET", "POST"])
 def room():
+    if not session.get('logged_in'):
+        return render_template('login.html.jinja2')
     def reserve_room(form):
         reservable = findRoomWith404(
             form.agenda.reservable.data)
@@ -188,19 +190,19 @@ def reset():
         session.clear()
         initApp()
         redirect(url_for('home'))
-    return flask.render_template("login.html.jinja2")
+    return render_template("login.html.jinja2")
 
 @app.route('/contact', methods=["GET"])
 def contact():
     if session.get('logged_in') :
-        return flask.render_template("contact.html.jinja2")
-    return flask.render_template("login.html.jinja2")
+        return render_template("contact.html.jinja2")
+    return render_template("login.html.jinja2")
 
 @app.errorhandler(404)
 def not_found(e):
-    return flask.render_template("404.html.jinja2"), 404
+    return render_template("404.html.jinja2"), 404
 
 
 if __name__ == '__main__':
-    app.secret_key = os.urandom(16)
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)), debug=True)
+    app.secret_key = urandom(16)
+    app.run(host='0.0.0.0', port=int(environ.get("PORT", 5000)), debug=True)
