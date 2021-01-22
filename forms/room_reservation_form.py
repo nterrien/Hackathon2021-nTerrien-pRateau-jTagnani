@@ -5,7 +5,7 @@ from wtforms.fields.core import DateField, IntegerField, TimeField
 from wtforms import validators
 
 class RoomReservationForm(FlaskForm):
-    startDate = DateField("Jour de reservation", [
+    startDate = DateField("Jour de reservation (veuillez choisir le jour)", [
         validators.DataRequired()], format="%d/%m/%Y")
     startHour = TimeField("Heure de début (format HH:MM)")
     duration = IntegerField("Durée de la reservation en minutes")
