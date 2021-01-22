@@ -19,8 +19,12 @@ html {
     }
 }
 
+.header-agenda {
+    height: 2em
+}
+
 .day {
-    min-height: 375px;
+    min-height: 600px;
     height: 96vh;
     margin: 0;
     padding: 0;
@@ -31,6 +35,7 @@ html {
 }
 
 .hour {
+    min-height: 50px;
     height: 8vh;
     text-align: right;
 }
@@ -41,6 +46,10 @@ html {
 
 .your-reservation {
     background-color: rgb(235, 255, 148)
+}
+
+.not-your-reservation {
+    background-color: white
 }
 
 .tooltip2 .tooltiptext {
