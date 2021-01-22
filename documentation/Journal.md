@@ -92,6 +92,6 @@ Nous avons prévu de faire :
 
 
 
-Lien vers le site deployé sur Scalingo : http://hackaton2021jnp.osc-fr1.scalingo.io/
+Lien vers le site deployé sur Scalingo : https://hackaton2021jnp.osc-fr1.scalingo.io/
 
 Lien vers le Github : https://github.com/nterrien/Hackathon2021-nTerrien-pRateau-jTagnani
