@@ -76,6 +76,7 @@ Nous avons prévu de faire :
     * Nous avons mis en place le deploiement automatique de la branche develop
     * Grosse refactorisation et réorganisation du code
     * Correction de bugs divers
+
 ## 22/01/2021 15h30
 * FrontEnd :
     * Petit changement graphique de l'agenda
@@ -92,4 +93,5 @@ Nous avons prévu de faire :
 
 
 Lien vers le site deployé sur Scalingo : http://hackaton2021jnp.osc-fr1.scalingo.io/
-Lien vers le Github : https://github.com/nterrien/Hackathon2021-nTerrien-pRateau-jTagnani/network
+
+Lien vers le Github : https://github.com/nterrien/Hackathon2021-nTerrien-pRateau-jTagnani
