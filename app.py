@@ -9,7 +9,7 @@ from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
 from forms.washing_machine_form import WashingMachineForm
 from forms.room_form import RoomForm
-from forms.login_forms import RegistrationForm, LoginForm, ChangePassword, UsernameForm
+from forms.login_forms import RegistrationForm, ChangePassword, UsernameForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.dbMethods import addUser, findUser, updateUser, updateUsername
 from utils.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
@@ -50,13 +50,11 @@ def home():
         return flask.render_template("home.html.jinja2", username=username)
 
 # Page de login
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def do_admin_login():
     if request.method == 'GET':
         return flask.render_template("login.html.jinja2")
-    form = LoginForm(request.form)
+    form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         # Bon id/mdp ?
         result = request.form
@@ -75,11 +73,7 @@ def do_admin_login():
         return redirect(url_for('home'))
     return flask.render_template("login.html.jinja2")
 
-    # return home()
-
 # logout
-
-
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
@@ -87,8 +81,6 @@ def logout():
     return redirect(url_for('home'))
 
 # signin
-
-
 @app.route("/signin", methods=['GET', 'POST'])
 def signin():
     form = RegistrationForm(request.form)
@@ -264,7 +256,11 @@ def reset():
     initApp()
     return flask.render_template("home.html.jinja2")
 
-
+@app.route('/contact', methods=["GET"])
+def contact():
+    if session.get('logged_in') :
+        return flask.render_template("contact.html.jinja2")
+    return flask.render_template("login.html.jinja2")
 
 @app.errorhandler(404)
 def not_found(e):
