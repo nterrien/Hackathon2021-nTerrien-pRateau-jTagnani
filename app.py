@@ -100,7 +100,6 @@ def signin():
     return flask.render_template("signin.html.jinja2")
 
 
-
 @app.route('/changePassword', methods=["GET", "POST"])
 def change():
     if not session.get('logged_in'):
@@ -153,61 +152,58 @@ def general():
 # Page de reservation des machines à laver
 @app.route('/washing', methods=["GET", "POST"])
 def washing():
-    if session.get('logged_in'):
-        form = WashingMachineForm(obj=getMachineList())
-        form.agenda.reservable.choices = [g.index for g in getMachineList()]
-        if "reservation" in request.form and form.reservation.validate(form):
-            machine = findMachineWith404(form.agenda.reservable.data)
-            datetimeStart = datetime.combine(
-                form.reservation.startDate.data, form.reservation.startHour.data)
-            success = machine.reserve(datetimeStart, session['username'])
-            if success == False:
-                flash("Le créneau " + str(form.reservation.startHour.data.strftime('%H:%M')) +
-                      ' - ' + str((datetimeStart + machine.duration).time().strftime('%H:%M')) + " du " + str(form.reservation.startDate.data.strftime('%d/%m/%Y')) + " de la machine " + str(form.agenda.reservable.data) + " est déjà pris.", "warning")
-            else:
-                flash("Le créneau a bien été reservé.", "success")
-            form.agenda.date.data = form.reservation.startDate.data
-            return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findMachineWith404(form.agenda.reservable.data)), username=session['username'], reservable_type="machine")
-        elif "agenda" in request.form and form.agenda.validate(form):
-            form.reservation.startDate.data = form.agenda.date.data
-            return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findMachineWith404(form.agenda.reservable.data)), username=session['username'], reservable_type="machine")
+    def reserve_washingmachine(form):
+        machine = findMachineWith404(form.agenda.reservable.data)
+        datetimeStart = datetime.combine(
+            form.reservation.startDate.data, form.reservation.startHour.data)
+        success = machine.reserve(datetimeStart, session['username'])
+        if success == False:
+            flash("Le créneau " + str(form.reservation.startHour.data.strftime('%H:%M')) +
+                  ' - ' + str((datetimeStart + machine.duration).time().strftime('%H:%M')) + " du " + str(form.reservation.startDate.data.strftime('%d/%m/%Y')) + " de la machine " + str(form.agenda.reservable.data) + " est déjà pris.", "warning")
         else:
-            form.agenda.reservable.data = getMachineList()[0].index
-            form.agenda.date.data = date.today()
-            form.reservation.startDate.data = form.agenda.date.data
-            return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findMachineWith404(form.agenda.reservable.data)), username=session['username'], reservable_type="machine")
-    else:
-        return redirect(url_for('home'))
+            flash("Le créneau a bien été reservé.", "success")
 
+    return reservation_general(getMachineList, findMachineWith404, reserve_washingmachine,
+                               "machine", "washing.html.jinja2")
 
 # Page de reservation des salles
 @app.route('/room', methods=["GET", "POST"])
 def room():
+    def reserve_room(form):
+        reservable = findRoomWith404(
+            form.agenda.reservable.data)
+        duration = timedelta(minutes=form.reservation.duration.data)
+        datetimeStart = datetime.combine(
+            form.reservation.startDate.data, form.reservation.startHour.data)
+        success = reservable.reserve(
+            datetimeStart, duration, session['username'])
+        if success == False:
+            flash("Le créneau " + str(form.reservation.startHour.data.strftime('%H:%M')) +
+                  ' - ' + str((datetimeStart + duration).time().strftime('%H:%M')) + " du " + str(form.reservation.startDate.data.strftime('%d/%m/%Y')) + " de la salle " + str(form.agenda.reservable.data) + " est déjà pris.", "warning")
+        else:
+            flash("Le créneau a bien été reservé.", "success")
+
+    return reservation_general(getRoomList, findRoomWith404, reserve_room,
+                               "salle", "room.html.jinja2")
+
+
+def reservation_general(reservableListMethods, findReservablewith404, reservationMethod, reservable_type, template_name):
     if session.get('logged_in'):
-        form = RoomForm(obj=getRoomList())
-        form.agenda.reservable.choices = [g.index for g in getRoomList()]
+        form = RoomForm(obj=reservableListMethods())
+        form.agenda.reservable.choices = [
+            g.index for g in reservableListMethods()]
         if "reservation" in request.form and form.reservation.validate(form):
-            room = findRoomWith404(form.agenda.reservable.data)
-            duration = timedelta(minutes=form.reservation.duration.data)
-            datetimeStart = datetime.combine(
-                form.reservation.startDate.data, form.reservation.startHour.data)
-            success = room.reserve(
-                datetimeStart, duration, session['username'])
-            if success == False:
-                flash("Le créneau " + str(form.reservation.startHour.data.strftime('%H:%M')) +
-                      ' - ' + str((datetimeStart + duration).time().strftime('%H:%M')) + " du " + str(form.reservation.startDate.data.strftime('%d/%m/%Y')) + " de la salle " + str(form.agenda.reservable.data) + " est déjà pris.", "warning")
-            else:
-                flash("Le créneau a bien été reservé.", "success")
+            success = reservationMethod(form)
             form.agenda.date.data = form.reservation.startDate.data
-            return flask.render_template("room.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findRoomWith404(form.agenda.reservable.data)), username=session['username'], reservable_type="salle")
+            return flask.render_template(template_name, form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findReservablewith404(form.agenda.reservable.data)), username=session['username'], reservable_type=reservable_type)
         elif "agenda" in request.form and form.agenda.validate(form):
             form.reservation.startDate.data = form.agenda.date.data
-            return flask.render_template("room.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findRoomWith404(form.agenda.reservable.data)), username=session['username'], reservable_type="salle")
+            return flask.render_template(template_name, form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findReservablewith404(form.agenda.reservable.data)), username=session['username'], reservable_type=reservable_type)
         else:
-            form.agenda.reservable.data = getRoomList()[0].index
+            form.agenda.reservable.data = reservableListMethods()[0].index
             form.agenda.date.data = date.today()
             form.reservation.startDate.data = form.agenda.date.data
-            return flask.render_template("room.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findRoomWith404(form.agenda.reservable.data)), username=session['username'], reservable_type="salle")
+            return flask.render_template(template_name, form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findReservablewith404(form.agenda.reservable.data)), username=session['username'], reservable_type=reservable_type)
     else:
         return redirect(url_for('home'))
 
