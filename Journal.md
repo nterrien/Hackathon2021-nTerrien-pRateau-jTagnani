@@ -35,7 +35,7 @@ Nous avons prévu de faire :
 Nous avons codé :
 * Coté BDD :
     * Ajout de la gestion de plusieurs machines
-    * Le code est plus modulaire poru povuoir reserver autre chose que les machines à laver
+    * Le code est plus modulaire pour pouvoir reserver autre chose que les machines à laver
     * Ajout de la gestion des salles en BDD
 * L'authentification :
     * Page de connexion et gestion de la connexion
@@ -57,3 +57,11 @@ Nous avons prévu de faire :
     * merge l'API
     * relier l'utilisateur et les réservations
     * réorganiser le code dans plus de dossiers
+
+## 20/01/2021 11h00
+
+* L'authentification :
+    * Les pages sont adaptés pour le format mobile
+    * Possibilité de changer son mdp et nom d'utilisateur via l'onglet profil
+* FrontEnd :
+    * Rajout d'un onglet contact avec nos informations
