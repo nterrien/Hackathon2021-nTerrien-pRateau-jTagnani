@@ -205,4 +205,4 @@ def not_found(e):
 
 if __name__ == '__main__':
     app.secret_key = urandom(16)
-    app.run(host='0.0.0.0', port=int(environ.get("PORT", 5000)), debug=True)
+    app.run(host='0.0.0.0', port=int(environ.get("PORT", 5000)))
