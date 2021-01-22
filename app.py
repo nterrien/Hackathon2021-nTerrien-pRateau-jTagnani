@@ -2,17 +2,15 @@ from flask import Flask, flash, request, redirect, url_for, make_response, sessi
 from flask_hashing import Hashing
 import flask  # BSD License (BSD-3-Clause)
 import os
-from datetime import datetime, date, timedelta
 from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
-from forms.washing_machine_form import WashingMachineForm
-from forms.room_form import RoomForm
 from forms.login_forms import RegistrationForm, ChangePassword, UsernameForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.dbMethods import addUser, findUser, updateUser, updateUsername
+from reservation.reservation import reservation_general, getReservationWeek
 from utils.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
 from utils.objects.room import getRoomList, initRoomList, findRoomWith404
-from timeConversion import timeToMinutes, getDayWeek
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 hashing = Hashing(app)
@@ -152,6 +150,8 @@ def general():
 # Page de reservation des machines à laver
 @app.route('/washing', methods=["GET", "POST"])
 def washing():
+    if not session.get('logged_in'):
+        return flask.render_template('login.html.jinja2')
     def reserve_washingmachine(form):
         machine = findMachineWith404(form.agenda.reservable.data)
         datetimeStart = datetime.combine(
@@ -164,7 +164,7 @@ def washing():
             flash("Le créneau a bien été reservé.", "success")
 
     return reservation_general(getMachineList, findMachineWith404, reserve_washingmachine,
-                               "machine", "washing.html.jinja2")
+                               "machine", "washing.html.jinja2", session['username'])
 
 # Page de reservation des salles
 @app.route('/room', methods=["GET", "POST"])
@@ -184,56 +184,7 @@ def room():
             flash("Le créneau a bien été reservé.", "success")
 
     return reservation_general(getRoomList, findRoomWith404, reserve_room,
-                               "salle", "room.html.jinja2")
-
-
-def reservation_general(reservableListMethods, findReservablewith404, reservationMethod, reservable_type, template_name):
-    if session.get('logged_in'):
-        form = RoomForm(obj=reservableListMethods())
-        form.agenda.reservable.choices = [
-            g.index for g in reservableListMethods()]
-        if "reservation" in request.form and form.reservation.validate(form):
-            success = reservationMethod(form)
-            form.agenda.date.data = form.reservation.startDate.data
-            return flask.render_template(template_name, form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findReservablewith404(form.agenda.reservable.data)), username=session['username'], reservable_type=reservable_type)
-        elif "agenda" in request.form and form.agenda.validate(form):
-            form.reservation.startDate.data = form.agenda.date.data
-            return flask.render_template(template_name, form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findReservablewith404(form.agenda.reservable.data)), username=session['username'], reservable_type=reservable_type)
-        else:
-            form.agenda.reservable.data = reservableListMethods()[0].index
-            form.agenda.date.data = date.today()
-            form.reservation.startDate.data = form.agenda.date.data
-            return flask.render_template(template_name, form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findReservablewith404(form.agenda.reservable.data)), username=session['username'], reservable_type=reservable_type)
-    else:
-        return redirect(url_for('home'))
-
-
-
-
-
-def getReservationWeek(week, reservable):
-    '''Les données retournées sont une liste avec chaque element qui correspond à un jour de la semaine
-    Chaque jour est une liste de reservations composé de le % de la journée que represente cette reservation, le nom du reservant, l'heure de debut, l'heure de fin.
-    Si None est le nom du reservant cela signifie que c'est une reservation vide utilisé pour faire des trous dans l'afficahge en HTML'''
-    agenda = []
-    for day in week:
-        reservations = reservable.checkDate(day)
-        dayAgenda = []
-        for reservation in reservations:
-            dayAgenda.append([100*((timeToMinutes(reservation.end)-timeToMinutes(reservation.start))/(24*60)),
-                              reservation.name, reservation.start.time(), reservation.end.time(), reservation.user])
-        current = 0
-        schedule = []
-        for reservation in dayAgenda:
-            if (reservation[0] != current):
-                schedule.append(
-                    [100*(timeToMinutes(reservation[2]) - current)/(24*60), None, None, None, None])
-            schedule.append(reservation)
-            current = timeToMinutes(reservation[3])
-        agenda.append(schedule)
-    print(agenda)
-    return agenda
-
+                               "salle", "room.html.jinja2", session['username'])
 
 
 @app.route('/reset', methods=["GET", "POST"])
