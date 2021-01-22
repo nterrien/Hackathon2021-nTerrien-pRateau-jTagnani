@@ -224,12 +224,12 @@ def room():
             datetimeStart = datetime.combine(
                 form.reservation.startDate.data, form.reservation.startHour.data)
             success = room.reserve(
-                datetimeStart, duration)
+                datetimeStart, duration, session['username'])
             if success == False:
                 flash("Le créneau " + str(form.reservation.startHour.data.strftime('%H:%M')) +
                       ' - ' + str((datetimeStart + duration).time().strftime('%H:%M')) + " de la salle " + str(form.agenda.room.data) + " est déjà pris.", "warning")
             else:
-                flash("Le créneau a bien été reservé.", "success", )
+                flash("Le créneau a bien été reservé.", "success")
             form.agenda.date.data = form.reservation.startDate.data
             return flask.render_template("room.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findRoomWith404(form.agenda.room.data)))
         elif "agenda" in request.form and form.agenda.validate(form):
@@ -251,23 +251,23 @@ def getDayWeek(day):
     return dates
 
 
-def getReservationWeek(week, machine):
+def getReservationWeek(week, reservable):
     '''Les données retournées sont une liste avec chaque element qui correspond à un jour de la semaine
     Chaque jour est une liste de reservations composé de le % de la journée que represente cette reservation, le nom du reservant, l'heure de debut, l'heure de fin.
     Si None est le nom du reservant cela signifie que c'est une reservation vide utilisé pour faire des trous dans l'afficahge en HTML'''
     agenda = []
     for day in week:
-        reservations = machine.checkDate(day)
+        reservations = reservable.checkDate(day)
         dayAgenda = []
         for reservation in reservations:
             dayAgenda.append([100*((timeToMinutes(reservation.end)-timeToMinutes(reservation.start))/(24*60)),
-                              reservation.name, reservation.start.time(), reservation.end.time()])
+                              reservation.name, reservation.start.time(), reservation.end.time(), reservation.user])
         current = 0
         schedule = []
         for reservation in dayAgenda:
             if (reservation[0] != current):
                 schedule.append(
-                    [100*(timeToMinutes(reservation[2]) - current)/(24*60), None, None, None])
+                    [100*(timeToMinutes(reservation[2]) - current)/(24*60), None, None, None, None])
             schedule.append(reservation)
             current = timeToMinutes(reservation[3])
         agenda.append(schedule)
@@ -337,7 +337,7 @@ def update():
     return flask.render_template("home.html.jinja2")
 
 
-@ app.errorhandler(404)
+@app.errorhandler(404)
 def not_found(e):
     return flask.render_template("404.html.jinja2"), 404
 
