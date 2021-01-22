@@ -1,0 +1,226 @@
+{% extends "general.html.jinja2" %} 
+
+{% block content %} 
+    {# Agenda version bureau qui differe de la version mobile #}
+    <div class="col-sm-offset-2 col-sm-8 text-center"> 
+        <h3 class="hide-smartphone col-12">Disponibilité de la {{type_reservable}} {{form.agenda.reservable.data}} la semaine du {{form.agenda.date.data.strftime('%d/%m/%Y')}}</h3>
+    </div>    
+        <div class="row hide-smartphone"  style="margin-bottom: 1em">
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class ="col-sm-4">
+                        <p class="text-right">Heure</p>
+                        {% for hour in range(0,24,2) %}
+                            <div class="hour">
+                              <p> {{hour}}h </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if form.agenda.date.data == week[0] %}
+                        <div class="col-sm-4 border selectedDay"> 
+                    {% else %}
+                        <div class="col-sm-4 border"> 
+                    {% endif %}
+                        <p class="text-center">Lundi {{week[0].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[0]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    {% if reservation[4] == username %}
+                                        <div class="border text-center your-reservation tooltip2" style="height:{{reservation[0]}}%">
+                                    {% else %}
+                                        <div class="border text-center tooltip2" style="height:{{reservation[0]}}%">
+                                    {% endif %}
+                                    <span class="tooltiptext">Réservé par {{reservation[4]}}</span>
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                        {% if form.agenda.date.data == week[1] %}
+                            <div class="col-sm-4 border selectedDay"> 
+                        {% else %}
+                            <div class="col-sm-4 border"> 
+                        {% endif %}
+                        <p class="text-center" >Mardi {{week[1].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[1]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    {% if reservation[4] == username %}
+                                        <div class="border text-center your-reservation tooltip2" style="height:{{reservation[0]}}%">
+                                    {% else %}
+                                        <div class="border text-center tooltip2" style="height:{{reservation[0]}}%">
+                                    {% endif %}
+                                    <span class="tooltiptext">Réservé par {{reservation[4]}}</span>
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="row">
+                    {% if form.agenda.date.data == week[2] %}
+                        <div class="col-sm-2 border selectedDay"> 
+                    {% else %}
+                        <div class="col-sm-2 border"> 
+                    {% endif %}
+                        <p class="text-center">Mercredi {{week[2].strftime('%d/%m/%y')}}<p>
+                            <div class="day">
+                            {% for reservation in agenda[2]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    {% if reservation[4] == username %}
+                                        <div class="border text-center your-reservation tooltip2" style="height:{{reservation[0]}}%">
+                                    {% else %}
+                                        <div class="border text-center tooltip2" style="height:{{reservation[0]}}%">
+                                    {% endif %}
+                                    <span class="tooltiptext">Réservé par {{reservation[4]}}</span>
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if form.agenda.date.data == week[3] %}
+                        <div class="col-sm-2 border selectedDay"> 
+                    {% else %}
+                        <div class="col-sm-2 border"> 
+                    {% endif %}
+                        <p class="text-center">Jeudi {{week[3].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[3]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    {% if reservation[4] == username %}
+                                        <div class="border text-center your-reservation tooltip2" style="height:{{reservation[0]}}%">
+                                    {% else %}
+                                        <div class="border text-center tooltip2" style="height:{{reservation[0]}}%">
+                                    {% endif %}
+                                    <span class="tooltiptext">Réservé par {{reservation[4]}}</span>
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if form.agenda.date.data == week[4] %}
+                        <div class="col-sm-2 border selectedDay"> 
+                    {% else %}
+                        <div class="col-sm-2 border"> 
+                    {% endif %}
+                        <p class="text-center">Vendredi {{week[4].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[4]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    {% if reservation[4] == username %}
+                                        <div class="border text-center your-reservation tooltip2" style="height:{{reservation[0]}}%">
+                                    {% else %}
+                                        <div class="border text-center tooltip2" style="height:{{reservation[0]}}%">
+                                    {% endif %}
+                                    <span class="tooltiptext">Réservé par {{reservation[4]}}</span>
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if form.agenda.date.data == week[5] %}
+                        <div class="col-sm-2 border selectedDay"> 
+                    {% else %}
+                        <div class="col-sm-2 border"> 
+                    {% endif %}
+                        <p class="text-center">Samedi {{week[5].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[5]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    {% if reservation[4] == username %}
+                                        <div class="border text-center your-reservation tooltip2" style="height:{{reservation[0]}}%">
+                                    {% else %}
+                                        <div class="border text-center tooltip2" style="height:{{reservation[0]}}%">
+                                    {% endif %}
+                                    <span class="tooltiptext">Réservé par {{reservation[4]}}</span>
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% if form.agenda.date.data == week[6] %}
+                        <div class="col-sm-2 border selectedDay"> 
+                    {% else %}
+                        <div class="col-sm-2 border"> 
+                    {% endif %}
+                        <p class="text-center">Dimanche {{week[6].strftime('%d/%m/%y')}}<p>
+                        <div class="day">
+                            {% for reservation in agenda[6]%}
+                                {% if reservation[1] == None %}
+                                    <div style="height:{{reservation[0]}}%">
+                                    </div>
+                                {% else %}
+                                    {% if reservation[4] == username %}
+                                        <div class="border text-center your-reservation tooltip2" style="height:{{reservation[0]}}%">
+                                    {% else %}
+                                        <div class="border text-center tooltip2" style="height:{{reservation[0]}}%">
+                                    {% endif %}
+                                    <span class="tooltiptext">Réservé par {{reservation[4]}}</span>
+                                    {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {# Agenda version mobile qui differe de la version mobile #}
+    <h3 class="hide-desktop text-center">Disponibilité de la {{type_reservable}} {{form.agenda.reservable.data}} le {{form.agenda.date.data.strftime('%d/%m/%Y')}}</h3>
+    <div class="row hide-desktop">
+    {# Changer les col pour qqch de plus automatique je pense #}
+        <div  style="margin: 1em">
+            <div class="col-xs-2">
+                <br>
+            {% for hour in range(0,24,2) %}
+                <div class="hour">
+                    <p> {{hour}}h </p>
+                </div>
+            {% endfor %}
+            </div>
+            <div class="day border col-xs-9">
+                {% for reservation in agenda[form.agenda.date.data.weekday()]%}
+                    {% if reservation[1] == None %}
+                        <div style="height:{{reservation[0]}}%">
+                        </div>
+                    {% else %}
+                            {% if reservation[4] == username %}
+                                <div class="border text-center your-reservation tooltip2" style="height:{{reservation[0]}}%">
+                            {% else %}
+                                <div class="border text-center tooltip2" style="height:{{reservation[0]}}%">
+                            {% endif %}
+                            <span class="tooltiptext">Réservé par {{reservation[4]}}</span>
+                            {{reservation[2].strftime('%H:%M')}} - {{reservation[3].strftime('%H:%M')}}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %} 

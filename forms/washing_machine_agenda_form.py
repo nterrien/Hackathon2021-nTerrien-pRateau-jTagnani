@@ -7,5 +7,5 @@ from wtforms.fields.core import DateField, SelectField
 
 
 class WashingMachineAgendaForm(FlaskForm):
-    machine = SelectField("Machine à laver", coerce=int)
+    reservable = SelectField("Machine à laver", coerce=int)
     date = DateField("Jour", format="%d/%m/%Y")
