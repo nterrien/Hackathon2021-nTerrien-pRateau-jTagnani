@@ -56,13 +56,13 @@ def findUser (username):
 
 
 ## Update
-def updateReservation (id, name, start, end, object, user):
-    reservation = findReservation (id)
-    reservation.name = name
-    reservation.start = start
-    reservation.end = end
-    reservation.object = object
-    reservation.user = user
+def updateReservation (reservation,name=None, start=None, end=None, object=None, user=None):
+    if name != None: reservation.name = name
+    if start != None: reservation.start = start
+    if end != None: reservation.end = end
+    if object != None: reservation.object = object
+    if user != None: reservation.user = user
+    print ("l'utilisateur est maintenant " + user)
     try :
         db.session.commit()
     except Exception as e:
@@ -70,19 +70,18 @@ def updateReservation (id, name, start, end, object, user):
                 "a cause de : %s" % e)
         db.session.rollback()
 
-def updateUser (user, username, password):
-    user.username = username
-    user.password = password
+def updateUser (user, username=None, password=None):
+    if username != None:
+        for reservation in findReservationByUser (user.username):
+            updateReservation (reservation, user=username)
+        user.username = username
+    if password != None: user.password = password
     try :
         db.session.commit()
     except Exception as e:
         print("[1] Je ne peux pas update un Utilisateur "
                 "a cause de : %s" % e)
         db.session.rollback()
-
-def updateUsername(user, username):
-    password = user.password
-    updateUser(user, username, password)
 
 
 ## Delete

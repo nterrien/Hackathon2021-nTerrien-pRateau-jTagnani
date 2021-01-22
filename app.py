@@ -6,14 +6,14 @@ from flask_datepicker import datepicker
 from datetime import datetime, timedelta
 
 from forms.login_forms import RegistrationForm, ChangePassword, UsernameForm
+from forms.room_form import RoomForm
+from forms.washing_machine_form import WashingMachineForm
 from bdd.database import db, init_database, populate_database, clear_database
-from bdd.dbMethods import addUser, findUser, updateUser, updateUsername
+from bdd.dbMethods import addUser, findUser, updateUser
 from reservation.reservation import reservation_general, getReservationWeek
 from reservation.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
 from reservation.objects.room import getRoomList, initRoomList, findRoomWith404
 from utils.timeConversion import timeToMinutes, getDayWeek
-from forms.room_form import RoomForm
-from forms.washing_machine_form import WashingMachineForm
 
 app = Flask(__name__)
 hashing = Hashing(app)
@@ -116,7 +116,7 @@ def change():
             if hashing.check_value(user.password, result['oldPassword'], salt='abcd'):
                 password = result['password']
                 hashPassword = hashing.hash_value(password, salt='abcd')
-                updateUser(user, username, hashPassword)
+                updateUser(user, password = hashPassword)
                 return render_template("home.html.jinja2")
         else:
             flash('Issue')
@@ -132,7 +132,7 @@ def profil():
         result = request.form
         username = session.get('username')
         user = findUser(username)
-        updateUsername(user, result['username'])
+        updateUser(user, username=result['username'])
         user = result['username']
         session['username'] = user
         return redirect(url_for('profil'))
