@@ -11,6 +11,7 @@ from reservation.reservation import reservation_general, getReservationWeek
 from utils.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
 from utils.objects.room import getRoomList, initRoomList, findRoomWith404
 from datetime import datetime, timedelta
+from utils.timeConversion import timeToMinutes, getDayWeek
 
 app = Flask(__name__)
 hashing = Hashing(app)
