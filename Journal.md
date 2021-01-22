@@ -76,3 +76,8 @@ Nous avons prévu de faire :
     * Nous avons mis en place le deploiement automatique de la branche develop
     * Grosse refactorisation et réorganisation du code
     * Correction de bugs divers
+## 22/01/2021 15h30
+* FrontEnd :
+    * Petit changement graphique de l'agenda
+    * Correction d'un bug qui concerne l'ajout d'une reservation dépassant minuit
+    * Amélioration de l'apparence de l'agenda lorsque que le téléphone est en mode paysage
