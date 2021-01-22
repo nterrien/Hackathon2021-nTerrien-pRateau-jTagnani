@@ -140,14 +140,6 @@ def profil():
         return flask.render_template('profil.html.jinja2', username=username)
 
 
-@app.route('/general', methods=["GET", "POST"])
-def general():
-    if not session.get('logged_in'):
-        return flask.render_template('login.html.jinja2')
-    else:
-        return flask.render_template("general.html.jinja2")
-
-
 # Page de reservation des machines à laver
 @app.route('/washing', methods=["GET", "POST"])
 def washing():
