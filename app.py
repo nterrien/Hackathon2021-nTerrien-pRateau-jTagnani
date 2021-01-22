@@ -64,7 +64,7 @@ def findAllReservations(id):
 @app.route('/machine/<id>/reserve', methods=["GET", "POST"])
 def reserve(id):
     machine = findMachineWith404 (id)
-    machine.reserve(datetime.today())
+    machine.reserve(datetime.today(), "user")
     return flask.render_template("home.html.jinja2")
 
 ## Pages pour montrer le fonctionnement de User

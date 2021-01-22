@@ -4,8 +4,8 @@ from bdd.models import Reservation, ReservedObject, User
 
 
 ## Create
-def addReservation (name, start, end, label):
-    reservation = Reservation (name=name, start=start, end=end, object=label)
+def addReservation (name, start, end, object, user):
+    reservation = Reservation (name=name, start=start, end=end, object=object, user=user)
     db.session.add (reservation)
     try :
         db.session.commit()
@@ -42,6 +42,9 @@ def findReservation (id):
 def findAllReservation ():
     return Reservation.query.all()
 
+def findReservationByUser (user):
+    return Reservation.query.filter_by(user = user).all()
+
 def findAllReservationByObject (object):
     return Reservation.query.filter_by(object = object).order_by(Reservation.start).all()
 
@@ -53,11 +56,13 @@ def findUser (username):
 
 
 ## Update
-def updateReservation (id, name, start, end):
+def updateReservation (id, name, start, end, object, user):
     reservation = findReservation (id)
     reservation.name = name
     reservation.start = start
     reservation.end = end
+    reservation.object = object
+    reservation.user = user
     try :
         db.session.commit()
     except Exception as e:
