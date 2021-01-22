@@ -82,6 +82,8 @@ def updateUser (user, username=None, password=None):
         print("[1] Je ne peux pas update un Utilisateur "
                 "a cause de : %s" % e)
         db.session.rollback()
+        return False
+    return True
 
 
 ## Delete
