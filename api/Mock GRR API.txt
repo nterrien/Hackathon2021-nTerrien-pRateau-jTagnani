@@ -1,0 +1,4 @@
+les endpoints :
+- https://mockgrrapi.osc-fr1.scalingo.io/rooms GET
+- https://mockgrrapi.osc-fr1.scalingo.io/room/<room_id>/planning GET
+- https://mockgrrapi.osc-fr1.scalingo.io/room/<room_id>/reserve PUT
