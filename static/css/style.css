@@ -47,6 +47,10 @@ html {
     background-color: rgb(235, 255, 148)
 }
 
+.not-your-reservation {
+    background-color: white
+}
+
 .tooltip2 .tooltiptext {
     visibility: hidden;
     width: 120px;
