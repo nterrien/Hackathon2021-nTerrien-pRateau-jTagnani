@@ -12,7 +12,7 @@ from bdd.database import db, init_database, populate_database, clear_database
 from bdd.dbMethods import addUser, findUser, updateUser, updateUsername
 from utils.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
 from utils.objects.room import getRoomList, initRoomList, findRoomWith404
-from timeConversion import timeToMinutes
+from timeConversion import timeToMinutes, getDayWeek
 
 app = Flask(__name__)
 hashing = Hashing(app)
@@ -208,11 +208,7 @@ def reservation_general(reservableListMethods, findReservablewith404, reservatio
         return redirect(url_for('home'))
 
 
-def getDayWeek(day):
-    weekday = day.isoweekday()
-    start = day - timedelta(days=weekday-1)
-    dates = [start + timedelta(days=d) for d in range(7)]
-    return dates
+
 
 
 def getReservationWeek(week, reservable):
