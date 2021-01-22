@@ -9,8 +9,8 @@ from forms.login_forms import RegistrationForm, ChangePassword, UsernameForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.dbMethods import addUser, findUser, updateUser, updateUsername
 from reservation.reservation import reservation_general, getReservationWeek
-from utils.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
-from utils.objects.room import getRoomList, initRoomList, findRoomWith404
+from reservation.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
+from reservation.objects.room import getRoomList, initRoomList, findRoomWith404
 from utils.timeConversion import timeToMinutes, getDayWeek
 from forms.room_form import RoomForm
 from forms.washing_machine_form import WashingMachineForm
