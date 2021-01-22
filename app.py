@@ -39,7 +39,6 @@ with app.app_context():
 
 @app.route('/', methods=["GET", "POST"])
 def home():
-    user = None
     if not session.get('logged_in'):
         return render_template('login.html.jinja2')
     else:
@@ -50,7 +49,7 @@ def home():
 
 # Page de login
 @app.route('/login', methods=['GET', 'POST'])
-def do_admin_login():
+def do_admin_login(): 
     if request.method == 'GET':
         return render_template("login.html.jinja2")
     form = RegistrationForm(request.form)
@@ -58,12 +57,15 @@ def do_admin_login():
         # Bon id/mdp ?
         result = request.form
         username = result['username']
+        # On regarde si l'utilisateur correspondant au nom d'utilisateur existe
         if findUser(username) == None:
             flash('wrong username')
             return render_template("login.html.jinja2")
+            # On trouce l'user correspondant
         user = findUser(username)
         hashPassword = user.password
         passw = result['password']
+        # On compare avec la bdd
         if hashing.check_value(hashPassword, passw, salt='abcd'):
             session['username'] = username
             session['logged_in'] = True
@@ -79,19 +81,19 @@ def logout():
     # return home()
     return redirect(url_for('home'))
 
-# signin
+# Page pour s'inscrire sur le site
 @app.route("/signin", methods=['GET', 'POST'])
 def signin():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-        # Ajout des données dans la bdd
         result = request.form
         username = result['username']
         password = result['password']
-
-        # Pour l'instant en clair mais à améliorer : hashage
+        # On hash le password avec un système qui donne tjs le même hash pour simplifier
         hashPassword = hashing.hash_value(password, salt='abcd')
+        # On regarde si l'utilisateur existe déjà
         if findUser(username) == None:
+            # Ajout des données dans la bdd
             addUser(username, hashPassword)
             print(hashPassword)
         else:
@@ -100,7 +102,7 @@ def signin():
         return redirect(url_for('do_admin_login'))
     return render_template("signin.html.jinja2")
 
-
+# Page qui permet de modifier son mot de passe
 @app.route('/changePassword', methods=["GET", "POST"])
 def change():
     if not session.get('logged_in'):
@@ -110,9 +112,10 @@ def change():
     if request.method == 'POST':
         if form.validate():
             result = request.form
+            # On récupère le nom de l'utilisateur
             username = session.get('username')
-            print(username)
             user = findUser(username)
+            # On compare le mdp de l'user avec celui qu'il rentre pour changer de mdp
             if hashing.check_value(user.password, result['oldPassword'], salt='abcd'):
                 password = result['password']
                 hashPassword = hashing.hash_value(password, salt='abcd')
@@ -122,7 +125,7 @@ def change():
             flash('Issue')
     return render_template('changePassword.html.jinja2')
 
-
+# Page qui permet de modifier son nom d'utilisateur et son mot de passe
 @app.route('/profil', methods=["GET", "POST"])
 def profil():
     if not session.get('logged_in'):
@@ -131,6 +134,7 @@ def profil():
     if request.method == 'POST' and form.validate():
         result = request.form
         username = session.get('username')
+        # Utilisation des méthodes de la bdd pour trouver l'utilisateur et changer son mdp
         user = findUser(username)
         updateUsername(user, result['username'])
         user = result['username']
