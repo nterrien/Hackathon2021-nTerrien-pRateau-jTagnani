@@ -13,9 +13,9 @@ from flask_datepicker import datepicker
 from forms.washing_machine_form import WashingMachineForm
 from forms.room_form import RoomForm
 from bdd.database import db, init_database, populate_database, clear_database
-from bdd.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
-from bdd.objects.room import getRoomList, initRoomList, findRoomWith404
 from bdd.dbMethods import addUser, findUser, updateUser, updateUsername
+from utils.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
+from utils.objects.room import getRoomList, initRoomList, findRoomWith404
 from datetime import datetime, date
 
 

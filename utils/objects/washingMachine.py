@@ -1,4 +1,4 @@
-from bdd.objects.reservedObject import ReservedObject
+from utils.objects.reservedObject import ReservedObject
 from datetime import timedelta
 from flask import abort
 

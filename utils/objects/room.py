@@ -1,4 +1,4 @@
-from bdd.objects.reservedObject import ReservedObject
+from utils.objects.reservedObject import ReservedObject
 from api.grrAPI import getRooms, addPlanning, reserveRoom
 
 BASE_LABEL = "Room_"
