@@ -40,14 +40,18 @@ def findRoomWith404 (id):
         print(e)
         abort(404)
 
+def getRoomList ():
+    return roomList
+
 class Room (ReservedObject):
 
     def __init__ (self, id, external=False):
         super().__init__(id, BASE_LABEL)
         self.external = external
 
-    def reserve(self, dtStart, dtEnd):
-        success = super().reserve(dtStart, dtEnd)
+    def reserve(self, dtStart, duration):
+        success = super().reserve(dtStart, duration)
         if (success and self.external):
+            dtEnd = dtStart + duration
             return reserveRoom (self.index, dtStart, dtEnd)
         return success

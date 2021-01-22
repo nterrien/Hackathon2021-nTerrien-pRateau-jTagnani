@@ -33,7 +33,9 @@ def addPlanning (room):
     reservationsToAdd = getPlanning(room_id)
     if (reservationsToAdd == False): return False
     for r in reservationsToAdd:
-        room.reserve (r['start_date'], r['end_date'])
+        dtStart = r['start_date']
+        duration = dtStart - r['end_date']
+        room.reserve (dtStart, duration)
     return True
 
 def reserveRoom (room_id, startDate, endDate, user="not specified"):
