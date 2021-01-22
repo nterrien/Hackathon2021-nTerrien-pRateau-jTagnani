@@ -64,7 +64,7 @@ def do_admin_login():
         user = findUser(username)
         hashPassword = user.password
         passw = result['password']   
-        if hashing.check_value(hashPassword, passw, salt='abcd'): 
+        if hashing.check_value(hashPassword, passw, salt='abcd') : 
             session['username'] = username
             session['logged_in'] = True
         else:
