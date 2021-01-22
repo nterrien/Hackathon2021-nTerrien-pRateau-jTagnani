@@ -76,6 +76,7 @@ def do_admin_login():
         else:
             flash('wrong password!')
         return redirect(url_for('home'))
+    return flask.render_template("login.html.jinja2")
 
     # return home()
 
@@ -105,7 +106,6 @@ def signin():
         if findUser(username) == None:
             addUser(username, hashPassword)
             print(hashPassword)
-            session['logged_in'] = True
         else:
             flash('Oups ! Sign in failed, user already exists')
         session['username'] = username
@@ -336,6 +336,12 @@ def update():
     user = findUser("admin")
     updateUser(user, "admin2", "new password")
     return flask.render_template("home.html.jinja2")
+
+@app.route('/contact', methods=["GET"])
+def contact():
+    if session.get('logged_in') :
+        return flask.render_template("contact.html.jinja2")
+    return flask.render_template("login.html.jinja2")
 
 
 @app.errorhandler(404)
