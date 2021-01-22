@@ -134,11 +134,13 @@ def profil():
     if request.method == 'POST' and form.validate():
         result = request.form
         username = session.get('username')
-        # Utilisation des méthodes de la bdd pour trouver l'utilisateur et changer son mdp
+        # Utilisation des méthodes de la bdd pour trouver l'utilisateur et changer son nom
         user = findUser(username)
-        updateUsername(user, result['username'])
-        user = result['username']
-        session['username'] = user
+        if updateUsername(user, result['username']) :
+            user = result['username']
+            session['username'] = user
+        else :
+            flash('Cet utilisateur existe déjà')
         return redirect(url_for('profil'))
     if 'username' in session:
         username = None
