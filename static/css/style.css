@@ -38,3 +38,24 @@ html {
 .selectedDay {
     background-color: rgb(240, 240, 240)
 }
+
+.your-reservation {
+    background-color: rgb(235, 255, 148)
+}
+
+.tooltip2 .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip2:hover .tooltiptext {
+    visibility: visible;
+}
