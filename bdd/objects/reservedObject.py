@@ -4,7 +4,7 @@ from datetime import date, time, datetime, timedelta
 class ReservedObject ():
 
     def __init__ (self, id, baseLabel):
-        self.index = id
+        self.index = str(id)
         self.label = baseLabel + str(id)
         addReservedObject (self.label)
 

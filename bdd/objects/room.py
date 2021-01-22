@@ -28,7 +28,7 @@ def addRoom (id):
 
 def findRoom (id):
     ''' Trouve la salle correspondant à l'id et cause une erreur si non trouvée '''
-    id = int (id)
+    id = str (id)
     l = filter (lambda r : r.index == id, roomList)
     return next(l)
 
