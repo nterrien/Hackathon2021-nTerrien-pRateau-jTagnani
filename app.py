@@ -12,7 +12,7 @@ from bdd.database import db, init_database, populate_database, clear_database
 from bdd.dbMethods import addUser, findUser, updateUser, updateUsername
 from utils.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
 from utils.objects.room import getRoomList, initRoomList, findRoomWith404
-
+from timeConversion import timeToMinutes
 
 app = Flask(__name__)
 hashing = Hashing(app)
@@ -238,9 +238,6 @@ def getReservationWeek(week, reservable):
     print(agenda)
     return agenda
 
-
-def timeToMinutes(time):
-    return time.hour*60+time.minute
 
 
 @app.route('/reset', methods=["GET", "POST"])

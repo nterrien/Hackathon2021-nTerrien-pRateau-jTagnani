@@ -6,3 +6,6 @@ def datetimeToString (dt):
 
 def datetimeFromString (text):
     return datetime.strptime (text, '%Y-%m-%d %H:%M')
+
+def timeToMinutes(time):
+    return time.hour*60+time.minute

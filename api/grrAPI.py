@@ -1,5 +1,5 @@
 import requests
-from utils.convertDatetimeString import datetimeToString, datetimeFromString
+from utils.timeConversion import datetimeToString, datetimeFromString
 from datetime import datetime
 
 
