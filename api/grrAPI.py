@@ -1,15 +1,10 @@
 import requests
+from utils.convertDatetimeString import datetimeToString, datetimeFromString
 from datetime import datetime
 
 
 API_URL = "https://mockgrrapi.osc-fr1.scalingo.io"
 
-
-def datetimeToString (dt):
-    return dt.strftime ('%Y-%m-%d %H:%M')
-
-def datetimeFromString (text):
-    return datetime.strptime (text, '%Y-%m-%d %H:%M')
 
 def getRooms ():
     url = API_URL + "/rooms"
