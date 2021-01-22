@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="../static/css/stylelog.css" type="text/css">
+<link rel="shortcut icon" href="{{ url_for('static', filename='reservatruc.ico') }}">
+{% extends "flash.html.jinja2" %}
+
+
+
+{% block body %} 
+	<div class="text">Username must have between 4 and 25 characters</div>
+	<form action="/signin" method="POST">
+		<div class="login">
+			<div class="login-screen">
+				<div class="app-title">
+					<h1>Registration</h1>
+				</div>
+				<div class="login-form">
+					<div class="control-group">
+						<input type="text" class="login-field" value="" placeholder="username" name="username">
+						<label class="login-field-icon fui-user" for="login-name"></label>
+					</div>
+					<div class="control-group">
+						<input type="password" class="login-field" value="" placeholder="password" name="password">
+						<label class="login-field-icon fui-lock" for="login-pass"></label>
+					</div>
+					<input type="submit" value="Sign in" class="btn btn-primary btn-large btn-block">
+				</div>
+			</div>
+		</div>
+	</form>
+	<br>
+	<center>
+		<a href="/login">Already have an account</a>
+	</center>
+{% endblock %}

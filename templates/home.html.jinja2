@@ -1,27 +1,21 @@
 {% extends "general.html.jinja2" %} 
 
-{% block head %}
-   <title>Hello World</title>
+{% block title %}
+   Reservatruc 
 {% endblock %} 
 
-{% block body %} 
+{% block content %} 
+  {{ super() }}
+<br>
+<center>
+   <h1>Bonjour {{username}} !</h1>
+   <br>
 
-    <h1>Rentre ton nom </h1>
-    {% if username %}
-        <p> Nom précédent : {{username}}
-    {% endif %}
-    <br>
-    <form action="{{ url_for("home") }}" method="post">
-        <div class="row">
-            <div class="col-sm-offset-3 col-sm-6">
-                <div>
-                {{ form.hidden_tag() }}
-                {{ form.name(class_="form-control") }}
-                </div>
-            </div>
-        </div>
-        <br>
-        <button type="submit" class="btn btn-primary mb-2">Go</button>
-    </form>
+   <div class="text">Bienvenue sur le site qui te permettra de ne plus perdre de temps à aller voir si une machine à laver ou une salle de la MDE est libre.</div>
+   <br>
+   <div class="text">Pour réserver une machine à laver va sur "Machines à laver" et pour réserver une salle va sur "Salles" !</div>
+   <br>
+   <div class="text">Ce site est un projet fait par des élèves de IMT Atlantique en 2021.</div>
+</center>   
     
 {% endblock %} 

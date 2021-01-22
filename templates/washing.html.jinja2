@@ -1,0 +1,65 @@
+{% extends "agenda.html.jinja2" %} 
+
+{% block title %}
+Réservation de machine à laver
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {{ datepicker.loader(theme="ui-darkness") }} {# to load jQuery-ui #}
+  {{ datepicker.picker(id=".dp", dateFormat='dd/mm/yy') }}
+{% endblock %}
+
+{% block content %} 
+    
+
+    <div class="col-sm-offset-2 col-sm-8 text-center"> 
+        <form action="{{ url_for("washing") }}" method="post">
+            <div class="row">
+                <div class="col-sm-6 col-md-offset-3 col-md-3">
+                    {{ form.agenda.hidden_tag() }}
+                    {{ form.agenda.reservable.label}}
+                    {{ form.agenda.reservable(class_="form-control") }}
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    {{ form.agenda.date.label}}
+                    {{ form.agenda.date(class_="form-control dp") }}
+                </div>
+            </div>
+            <br>
+            <button type="submit" name="agenda" class="btn btn-primary mb-2">Voir les disponibilités</button>
+            <br>
+            <a data-toggle="collapse" name="collapse" class="btn" data-target="#reservation">Reservation</a>
+            <div class="row">
+                <div id="reservation" class="collapse col-md-offset-2 col-md-8"> 
+                        <div class="row">
+                            <div class="col-sm-6">
+                                {{ form.reservation.hidden_tag() }}
+                                {{ form.reservation.startDate.label }}
+                                {{ form.reservation.startDate(class_="form-control dp") }}
+                            </div>
+                            <div class="col-sm-6">
+                                {{ form.reservation.startHour.label }}
+                                {{ form.reservation.startHour(class_="form-control", type="time") }}
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" name="reservation" class="btn btn-primary mb-2">Reserver la machine pour 45 minutes</button>
+                </div>
+            </div>
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" role="alert">
+                            <span>{{ message }}</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>    
+    {{super ()}}
+{% endblock %} 

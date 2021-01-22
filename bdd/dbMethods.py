@@ -1,101 +1,97 @@
 from bdd.database import db
-from bdd.models import Test, Category, Visitor, NameUsage
+from bdd.models import Reservation, ReservedObject, User
 
 
 
 ## Create
-def addTest (name, category):
-    test = Test(name=name, category=category)
-    db.session.add(test)
+def addReservation (name, start, end, object, user):
+    reservation = Reservation (name=name, start=start, end=end, object=object, user=user)
+    db.session.add (reservation)
     try :
         db.session.commit()
     except Exception as e:
-        print("[1] Je ne peux pas ajouter un test "
-                "a cause de : %s" % e)
-        db.session.rollback()
-        return
-    existCategory = findCategory (category)
-    if (not existCategory):
-        addCategory (category)
-
-def addCategory (name):
-    category = Category(name=name)
-    db.session.add(category)
-    try :
-        db.session.commit()
-    except Exception as e:
-        print("[1] Je ne peux pas ajouter une catégorie "
+        print("[1] Je ne peux pas ajouter de réservation "
                 "a cause de : %s" % e)
         db.session.rollback()
 
-def addVisitor (name, usages):
-    visitor = Visitor(name=name)
-    db.session.add(visitor)
+def addReservedObject (label):
+    object = ReservedObject (label=label)
+    db.session.add (object)
     try :
         db.session.commit()
     except Exception as e:
-        print("[1] Je ne peux pas ajouter un visiteur "
+        print("[1] Je ne peux pas ajouter d'object à réserver "
                 "a cause de : %s" % e)
         db.session.rollback()
-        return
-    if not findNameUsage(name):
-        for usage in usages:
-            addNameUsage (name, usage['usage_full'], usage['usage_gender'])
-    return visitor.id
 
-def addNameUsage (name, usage, gender):
-    nameUsage = NameUsage(name=name, usage=usage, gender=gender)
-    db.session.add(nameUsage)
+def addUser (username, password):
+    user = User (username=username, password=password)
+    db.session.add (user)
     try :
         db.session.commit()
     except Exception as e:
-        print("[1] Je ne peux pas ajouter un usage "
+        print("[1] Je ne peux pas ajouter d'utilisateur "
                 "a cause de : %s" % e)
         db.session.rollback()
 
 
 ## Read
-def findCategory (name):
-    return Category.query.filter_by(name = name).first()
+def findReservation (id):
+    return Reservation.query.filter_by(id = id).first()
 
-def findTest (id):
-    return Test.query.filter_by(id = id).first()
+def findAllReservation ():
+    return Reservation.query.all()
 
-def findAllCategories ():
-    return Category.query.all()
+def findReservationByUser (user):
+    return Reservation.query.filter_by(user = user).all()
 
-def findTestsByCategory (categoryName):
-    return Test.query.filter_by(category = categoryName).all()
+def findAllReservationByObject (object):
+    return Reservation.query.filter_by(object = object).order_by(Reservation.start).all()
 
-def findVisitorById (id):
-    return Visitor.query.filter_by(id = id).first()
+def findAllReservationByObjectAndByTime (object, timeStart, timeEnd):
+    return Reservation.query.filter_by(object = object).filter(Reservation.end > timeStart, Reservation.start < timeEnd).order_by(Reservation.start).all()
 
-def findAllVisitor ():
-    return Visitor.query.all()
-
-def findNameUsage (name):
-    return NameUsage.query.filter_by(name=name).all()
+def findUser (username):
+    return User.query.filter_by(username = username).first()
 
 
 ## Update
-def updateTest (id, name, category):
-    test = findTest (id)
-    test.name = name
-    test.category = category
+def updateReservation (reservation,name=None, start=None, end=None, object=None, user=None):
+    if name != None: reservation.name = name
+    if start != None: reservation.start = start
+    if end != None: reservation.end = end
+    if object != None: reservation.object = object
+    if user != None: reservation.user = user
+    print ("l'utilisateur est maintenant " + user)
     try :
         db.session.commit()
     except Exception as e:
-        print("[1] Je ne peux pas update un Test "
+        print("[1] Je ne peux pas update une Reservation "
                 "a cause de : %s" % e)
         db.session.rollback()
 
-
-## Delete
-def deleteTest (name):
-    Test.query.filter_by(name = name).delete()
+def updateUser (user, username=None, password=None):
+    if username != None:
+        for reservation in findReservationByUser (user.username):
+            updateReservation (reservation, user=username)
+        user.username = username
+    if password != None: user.password = password
     try :
         db.session.commit()
     except Exception as e:
-        print("[1] Je ne peux pas supprimer un Test "
+        print("[1] Je ne peux pas update un Utilisateur "
+                "a cause de : %s" % e)
+        db.session.rollback()
+        return False
+    return True
+
+
+## Delete
+def deleteReservation (id):
+    Reservation.query.filter_by(id = id).delete()
+    try :
+        db.session.commit()
+    except Exception as e:
+        print("[1] Je ne peux pas supprimer une Reservation "
                 "a cause de : %s" % e)
         db.session.rollback()

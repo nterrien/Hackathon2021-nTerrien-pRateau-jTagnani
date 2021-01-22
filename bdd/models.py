@@ -1,25 +1,20 @@
 from bdd.database import db
 
-class Test (db.Model):
-    __tablename__ = "test"
+
+class Reservation (db.Model):
+    __tablename__ = "reservation"
     id = db.Column(db.Integer, primary_key=True)
+    start = db.Column(db.DateTime)
+    end = db.Column(db.DateTime)
     name = db.Column(db.Text)
-    category = db.Column(db.Text, db.ForeignKey('category.name'))
+    object = db.Column(db.Text, db.ForeignKey('reservedObject.label'))
+    user = db.Column(db.Text, db.ForeignKey('user.username'))
 
-class Category (db.Model):
-    __tablename__ = "category"
-    name = db.Column(db.Text, primary_key=True)
-    tests = db.relationship('Test', backref='test.id', lazy='dynamic')
+class ReservedObject (db.Model):
+    __tablename__ = "reservedObject"
+    label = db.Column(db.Text, primary_key=True)
 
-class Visitor (db.Model):
-    __tablename__ = "visitor"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text)
-    usages = db.relationship('NameUsage', backref='nameUsage.name', lazy='dynamic')
-
-class NameUsage (db.Model):
-    __tablename__ = "nameUsage"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, db.ForeignKey('visitor.name'))
-    usage = db.Column(db.Text)
-    gender = db.Column(db.Text)
+class User (db.Model):
+    __tablename__ = "user"
+    username = db.Column(db.Text, primary_key=True)
+    password = db.Column(db.Text)
