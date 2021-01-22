@@ -4,14 +4,9 @@ import os
 from werkzeug.utils import secure_filename
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
-<<<<<<< HEAD
-from bdd.objects.room import roomList, initRoomList, findRoomWith404
+from bdd.objects.room import getRoomList, initRoomList, findRoomWith404
 from bdd.dbMethods import addUser, findUser, updateUser
 from datetime import datetime, date
-=======
-from bdd.objects.room import getRoomList, initRoomList, findRoomWith404
-from bdd.dbMethods import addUser, findUser, updateUser, updateUsername
->>>>>>> 0a51fb0... la réservation se fait maintenant avec une date et une durée
 
 
 app = Flask(__name__)

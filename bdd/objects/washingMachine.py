@@ -25,7 +25,7 @@ def addWashingMachine (id):
 
 def findMachine (id):
     ''' Trouve la machine correspondant à l'id et cause une erreur si non trouvée '''
-    id = int (id)
+    id = str (id)
     l = filter (lambda m : m.index == id, machineList)
     return next(l)
 
