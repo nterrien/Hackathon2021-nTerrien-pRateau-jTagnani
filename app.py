@@ -11,6 +11,7 @@ from datetime import datetime, date, timedelta
 from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
 from forms.washing_machine_form import WashingMachineForm
+from forms.room_form import RoomForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
 from bdd.objects.room import getRoomList, initRoomList, findRoomWith404
@@ -38,6 +39,8 @@ with app.app_context():
     initApp()
 
 # Route de base qui conduit à Login si l'utilisateur n'est pas identifié et à home si il l'est
+
+
 @app.route('/', methods=["GET", "POST"])
 def home():
     user = None
@@ -45,62 +48,67 @@ def home():
         return flask.render_template('login.html.jinja2')
     else:
         username = None
-        if session.get('username') != None :
+        if session.get('username') != None:
             username = session.get('username')
         return flask.render_template("home.html.jinja2", username=username)
 
 # Page de login
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def do_admin_login():
-    if request.method == 'GET' :
-        return flask.render_template("login.html.jinja2") 
+    if request.method == 'GET':
+        return flask.render_template("login.html.jinja2")
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         # Bon id/mdp ?
         result = request.form
         username = result['username']
-        if findUser(username) == None :
+        if findUser(username) == None:
             flash('wrong username')
             return flask.render_template("login.html.jinja2")
         user = findUser(username)
         hashPassword = user.password
-        passw = result['password']   
-        if hashing.check_value(hashPassword, passw, salt='abcd'): 
+        passw = result['password']
+        if hashing.check_value(hashPassword, passw, salt='abcd'):
             session['username'] = username
             session['logged_in'] = True
         else:
-            flash('wrong password!') 
+            flash('wrong password!')
         return redirect(url_for('home'))
-   
-           
-    #return home()
+
+    # return home()
 
 # logout
+
+
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
-    #return home()
+    # return home()
     return redirect(url_for('home'))
 
 # signin
+
+
 @app.route("/signin", methods=['GET', 'POST'])
 def signin():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-        #Ajout des données dans la bdd
+        # Ajout des données dans la bdd
         result = request.form
         username = result['username']
         password = result['password']
-        
+
         # Pour l'instant en clair mais à améliorer : hashage
         hashPassword = hashing.hash_value(password, salt='abcd')
-        if findUser(username) == None :
+        if findUser(username) == None:
             addUser(username, hashPassword)
             print(hashPassword)
             session['logged_in'] = True
-        else :
+        else:
             flash('Oups ! Sign in failed, user already exists')
-        session['username'] = username    
+        session['username'] = username
         return redirect(url_for('do_admin_login'))
     return flask.render_template("signin.html.jinja2")
 
@@ -108,40 +116,44 @@ def signin():
 class RegistrationForm(Form):
     username = StringField('Username', [validators.Length(min=4, max=25)])
     password = PasswordField('Password', [validators.DataRequired()])
-    
+
 
 class LoginForm(Form):
     username = StringField('Username', [validators.Length(min=4, max=25)])
     password = PasswordField('Password', [validators.DataRequired()])
 
+
 class ChangePassword(Form):
-    password = PasswordField('New Password', [validators.DataRequired(), EqualTo('confirm', message='Passwords must match')])
-    confirm  = PasswordField('Repeat password')
+    password = PasswordField('New Password', [validators.DataRequired(), EqualTo(
+        'confirm', message='Passwords must match')])
+    confirm = PasswordField('Repeat password')
+
 
 class UsernameForm(Form):
     username = StringField('Username', [validators.Length(min=4, max=25)])
-    
+
 
 @app.route('/changePassword', methods=["GET", "POST"])
 def change():
     if not session.get('logged_in'):
         return flask.render_template('login.html.jinja2')
     form = ChangePassword(request.form)
-    result=request.form
+    result = request.form
     if request.method == 'POST':
-        if form.validate() : 
-            result=request.form
+        if form.validate():
+            result = request.form
             username = session.get('username')
             print(username)
             user = findUser(username)
             if hashing.check_value(user.password, result['oldPassword'], salt='abcd'):
                 password = result['password']
                 hashPassword = hashing.hash_value(password, salt='abcd')
-                updateUser (user, username, hashPassword)
+                updateUser(user, username, hashPassword)
                 return flask.render_template("home.html.jinja2")
-        else :
-            flash('Issue')    
+        else:
+            flash('Issue')
     return flask.render_template('changePassword.html.jinja2')
+
 
 @app.route('/profil', methods=["GET", "POST"])
 def profil():
@@ -149,17 +161,17 @@ def profil():
         return flask.render_template('login.html.jinja2')
     form = UsernameForm(request.form)
     if request.method == 'POST' and form.validate():
-        result=request.form
+        result = request.form
         username = session.get('username')
         user = findUser(username)
         updateUsername(user, result['username'])
         user = result['username']
         session['username'] = user
         return redirect(url_for('profil'))
-    if 'username' in session :
+    if 'username' in session:
         username = None
         username = session.get('username')
-        return flask.render_template('profil.html.jinja2', username=username)    
+        return flask.render_template('profil.html.jinja2', username=username)
 
 
 @app.route('/general', methods=["GET", "POST"])
@@ -168,9 +180,9 @@ def general():
         return flask.render_template('login.html.jinja2')
     else:
         return flask.render_template("general.html.jinja2")
-    
 
 
+# Page de reservation des machines à laver
 @app.route('/washing', methods=["GET", "POST"])
 def washing():
     if session.get('logged_in'):
@@ -196,8 +208,40 @@ def washing():
             form.agenda.date.data = date.today()
             form.reservation.startDate.data = form.agenda.date.data
             return flask.render_template("washing.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findMachineWith404(form.agenda.machine.data)))
-    else :
-        return redirect(url_for('home'))        
+    else:
+        return redirect(url_for('home'))
+
+
+# Page de reservation des salles
+@app.route('/room', methods=["GET", "POST"])
+def room():
+    if session.get('logged_in'):
+        form = RoomForm(obj=getRoomList())
+        form.agenda.room.choices = [g.index for g in getRoomList()]
+        if "reservation" in request.form and form.reservation.validate(form):
+            room = findRoomWith404(form.agenda.room.data)
+            duration = timedelta(minutes=form.reservation.duration.data)
+            datetimeStart = datetime.combine(
+                form.reservation.startDate.data, form.reservation.startHour.data)
+            success = room.reserve(
+                datetimeStart, duration)
+            if success == False:
+                flash("Le créneau " + str(form.reservation.startHour.data.strftime('%H:%M')) +
+                      ' - ' + str((datetimeStart + duration).time().strftime('%H:%M')) + " de la salle " + str(form.agenda.room.data) + " est déjà pris.", "warning")
+            else:
+                flash("Le créneau a bien été reservé.", "success", )
+            form.agenda.date.data = form.reservation.startDate.data
+            return flask.render_template("room.html.jinja2", form=form, week=getDayWeek(form.reservation.startDate.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findRoomWith404(form.agenda.room.data)))
+        elif "agenda" in request.form and form.agenda.validate(form):
+            form.reservation.startDate.data = form.agenda.date.data
+            return flask.render_template("room.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findRoomWith404(form.agenda.room.data)))
+        else:
+            form.agenda.room.data = getRoomList()[0].index
+            form.agenda.date.data = date.today()
+            form.reservation.startDate.data = form.agenda.date.data
+            return flask.render_template("room.html.jinja2", form=form, week=getDayWeek(form.agenda.date.data), agenda=getReservationWeek(getDayWeek(form.agenda.date.data), findRoomWith404(form.agenda.room.data)))
+    else:
+        return redirect(url_for('home'))
 
 
 def getDayWeek(day):
@@ -206,12 +250,11 @@ def getDayWeek(day):
     dates = [start + timedelta(days=d) for d in range(7)]
     return dates
 
-# Les donner retourner sont une liste avec chaque element qui correspond à un jour de la semaine
-# Chaque jour est une liste de reservations composé de le % de la journée que represente cette reservation, le nom du reservant, l'heure de debut, l'heure de fin.
-# Si None est le nom du reservant cela signifie que c'est une reservation vide utilisé pour faire des trous dans l'afficahge en HTML
-
 
 def getReservationWeek(week, machine):
+    '''Les données retournées sont une liste avec chaque element qui correspond à un jour de la semaine
+    Chaque jour est une liste de reservations composé de le % de la journée que represente cette reservation, le nom du reservant, l'heure de debut, l'heure de fin.
+    Si None est le nom du reservant cela signifie que c'est une reservation vide utilisé pour faire des trous dans l'afficahge en HTML'''
     agenda = []
     for day in week:
         reservations = machine.checkDate(day)
@@ -247,7 +290,7 @@ def reset():
 
 @app.route('/machine/findAll', methods=["GET", "POST"])
 def findAllMachines():
-    print (getMachineList())
+    print(getMachineList())
     return flask.render_template("home.html.jinja2")
 
 
@@ -258,11 +301,9 @@ def check(id):
     return flask.render_template("home.html.jinja2")
 
 
-''' Accède à la machine id et regarde les réservations de tous les temps '''
-
-
 @app.route('/machine/<id>/findAll', methods=["GET", "POST"])
 def findAllReservations(id):
+    ''' Accède à la machine id et regarde les réservations de tous les temps '''
     machine = findMachineWith404(id)
     print(machine.findAll())
     return flask.render_template("home.html.jinja2")

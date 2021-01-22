@@ -3,9 +3,6 @@ from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
 from wtforms.fields.core import DateField, SelectField
 
-# Creation d'une classe heritant de 'flask_wtf.Form'
-
-
-class WashingMachineAgendaForm(FlaskForm):
-    machine = SelectField("Machine à laver", coerce=int)
+class RoomAgendaForm(FlaskForm):
+    room = SelectField("Salle", coerce=str)
     date = DateField("Jour", format="%d/%m/%Y")
