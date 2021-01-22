@@ -19,7 +19,8 @@ class ReservedObject ():
     def hasReservation (self, dtStart, dtEnd):
         return findAllReservationByObjectAndByTime (self.label, dtStart, dtEnd) != []
 
-    def reserve (self, dtStart, dtEnd):
+    def reserve (self, dtStart, duration):
+        dtEnd = dtStart + duration
         if self.hasReservation (dtStart, dtEnd):
             print ("déjà réservé")
             return False
