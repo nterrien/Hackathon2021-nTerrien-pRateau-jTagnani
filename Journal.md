@@ -81,3 +81,4 @@ Nous avons prévu de faire :
     * Petit changement graphique de l'agenda
     * Correction d'un bug qui concerne l'ajout d'une reservation dépassant minuit
     * Amélioration de l'apparence de l'agenda lorsque que le téléphone est en mode paysage
+    * Amélioration du champs de selection de l'heure
