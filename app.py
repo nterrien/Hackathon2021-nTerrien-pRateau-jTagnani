@@ -2,8 +2,6 @@ from flask import Flask, flash, request, redirect, url_for, make_response, sessi
 from flask_hashing import Hashing
 import flask  # BSD License (BSD-3-Clause)
 import os
-import hashlib
-from werkzeug.utils import secure_filename
 from datetime import datetime, date, timedelta
 from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
@@ -252,9 +250,12 @@ def timeToMinutes(time):
 @app.route('/reset', methods=["GET", "POST"])
 def reset():
     ''' Sur ce endpoint, on reset la base de données'''
-    clear_database()
-    initApp()
-    return flask.render_template("home.html.jinja2")
+    if session.get('logged_in') :
+        clear_database()
+        session.clear()
+        initApp()
+        redirect(url_for('home'))
+    return flask.render_template("login.html.jinja2")
 
 @app.route('/contact', methods=["GET"])
 def contact():
