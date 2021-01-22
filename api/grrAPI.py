@@ -34,11 +34,11 @@ def addPlanning (room):
     if (reservationsToAdd == False): return False
     for r in reservationsToAdd:
         dtStart = r['start_date']
-        duration = dtStart - r['end_date']
-        room.reserve (dtStart, duration)
+        duration = r['end_date'] - dtStart
+        room.reserve (dtStart, duration, r['user'])
     return True
 
-def reserveRoom (room_id, startDate, endDate, user="not specified"):
+def reserveRoom (room_id, startDate, endDate, user):
     data = {'start_date': datetimeToString (startDate), 'end_date': datetimeToString (endDate), 'user': user}
     url = API_URL + "/room/" + room_id + "/reserve"
     r = requests.get(url, data=data)

@@ -19,13 +19,13 @@ class ReservedObject ():
     def hasReservation (self, dtStart, dtEnd):
         return findAllReservationByObjectAndByTime (self.label, dtStart, dtEnd) != []
 
-    def reserve (self, dtStart, duration):
+    def reserve (self, dtStart, duration, user):
         dtEnd = dtStart + duration
         if self.hasReservation (dtStart, dtEnd):
             print ("déjà réservé")
             return False
         else :
-            addReservation ("automatic reservation", dtStart, dtEnd, self.label)
-            print ("réservé de " + dtStart.strftime("%d-%b-%Y (%H:%M:%S.%f)") + " à " + dtEnd.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
+            addReservation ("automatic reservation", dtStart, dtEnd, self.label, user)
+            print (self.label + " réservé de " + dtStart.strftime("%d-%b-%Y (%H:%M:%S.%f)") + " à " + dtEnd.strftime("%d-%b-%Y (%H:%M:%S.%f)"))
             return True
 

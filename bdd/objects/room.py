@@ -49,9 +49,9 @@ class Room (ReservedObject):
         super().__init__(id, BASE_LABEL)
         self.external = external
 
-    def reserve(self, dtStart, duration):
-        success = super().reserve(dtStart, duration)
+    def reserve(self, dtStart, duration, user):
+        success = super().reserve(dtStart, duration, user)
         if (success and self.external):
             dtEnd = dtStart + duration
-            return reserveRoom (self.index, dtStart, dtEnd)
+            return reserveRoom (self.index, dtStart, dtEnd, user)
         return success
