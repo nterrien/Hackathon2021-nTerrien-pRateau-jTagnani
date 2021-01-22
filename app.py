@@ -117,11 +117,9 @@ class RegistrationForm(Form):
     username = StringField('Username', [validators.Length(min=4, max=25)])
     password = PasswordField('Password', [validators.DataRequired()])
 
-
 class LoginForm(Form):
     username = StringField('Username', [validators.Length(min=4, max=25)])
     password = PasswordField('Password', [validators.DataRequired()])
-
 
 class ChangePassword(Form):
     password = PasswordField('New Password', [validators.DataRequired(), EqualTo(
@@ -286,62 +284,6 @@ def reset():
     initApp()
     return flask.render_template("home.html.jinja2")
 
-# Pages pour montrer le fonctionnement de WashingMachine
-
-
-@app.route('/machine/findAll', methods=["GET", "POST"])
-def findAllMachines():
-    print(getMachineList())
-    return flask.render_template("home.html.jinja2")
-
-
-@app.route('/machine/<id>/check', methods=["GET", "POST"])
-def check(id):
-    machine = findMachineWith404(id)
-    print(machine.checkDate(date.today()))
-    return flask.render_template("home.html.jinja2")
-
-
-@app.route('/machine/<id>/findAll', methods=["GET", "POST"])
-def findAllReservations(id):
-    ''' Accède à la machine id et regarde les réservations de tous les temps '''
-    machine = findMachineWith404(id)
-    print(machine.findAll())
-    return flask.render_template("home.html.jinja2")
-
-
-@app.route('/machine/<id>/reserve', methods=["GET", "POST"])
-def reserve(id):
-    machine = findMachineWith404(id)
-    machine.reserve(datetime.today(), "user")
-    return flask.render_template("home.html.jinja2")
-
-# Pages pour montrer le fonctionnement de User
-
-
-@app.route('/user/create', methods=["GET", "POST"])
-def create():
-    addUser("admin", "password")
-    return flask.render_template("home.html.jinja2")
-
-
-@app.route('/user/find', methods=["GET", "POST"])
-def find():
-    print(findUser("admin"))
-    return flask.render_template("home.html.jinja2")
-
-
-@app.route('/user/update', methods=["GET", "POST"])
-def update():
-    user = findUser("admin")
-    updateUser(user, "admin2", "new password")
-    return flask.render_template("home.html.jinja2")
-
-@app.route('/contact', methods=["GET"])
-def contact():
-    if session.get('logged_in') :
-        return flask.render_template("contact.html.jinja2")
-    return flask.render_template("login.html.jinja2")
 
 
 @app.errorhandler(404)
