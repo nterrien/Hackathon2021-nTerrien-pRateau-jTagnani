@@ -83,6 +83,11 @@ Nous avons prévu de faire :
     * Amélioration de l'apparence de l'agenda lorsque que le téléphone est en mode paysage
     * Amélioration du champs de selection de l'heure
     * Corrections de bug (authentification, changement de nom)
+* Bdd :
+    * Lorsqu'on change son nom, les réservations à notre nom sont elles aussi mise à jour
+    * réorganisation de fonctions
+* Autre :
+    * Mise en production et merge de develop sur le main
 
 
 
