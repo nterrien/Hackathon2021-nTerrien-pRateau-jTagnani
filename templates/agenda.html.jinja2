@@ -3,7 +3,7 @@
 {% block content %} 
     {# Agenda version bureau qui differe de la version mobile #}
     <div class="col-sm-offset-2 col-sm-8 text-center"> 
-        <h3 class="hide-smartphone col-12">Disponibilité de la {{type_reservable}} {{form.agenda.reservable.data}} la semaine du {{form.agenda.date.data.strftime('%d/%m/%Y')}}</h3>
+        <h3 class="hide-smartphone col-12">Disponibilité de la {{reservable_type}} {{form.agenda.reservable.data}} la semaine du {{form.agenda.date.data.strftime('%d/%m/%Y')}}</h3>
     </div>    
         <div class="row hide-smartphone"  style="margin-bottom: 1em">
             <div class="col-sm-4">
@@ -192,12 +192,11 @@
             </div>
         </div>
     {# Agenda version mobile qui differe de la version mobile #}
-    <h3 class="hide-desktop text-center">Disponibilité de la {{type_reservable}} {{form.agenda.reservable.data}} le {{form.agenda.date.data.strftime('%d/%m/%Y')}}</h3>
+    <h3 class="hide-desktop text-center">Disponibilité de la {{reservable_type}} {{form.agenda.reservable.data}} le {{form.agenda.date.data.strftime('%d/%m/%Y')}}</h3>
     <div class="row hide-desktop">
     {# Changer les col pour qqch de plus automatique je pense #}
         <div  style="margin: 1em">
             <div class="col-xs-2">
-                <br>
             {% for hour in range(0,24,2) %}
                 <div class="hour">
                     <p> {{hour}}h </p>
