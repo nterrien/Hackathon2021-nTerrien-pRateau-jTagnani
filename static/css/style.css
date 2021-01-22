@@ -24,7 +24,7 @@ html {
 }
 
 .day {
-    min-height: 375px;
+    min-height: 600px;
     height: 96vh;
     margin: 0;
     padding: 0;
@@ -35,6 +35,7 @@ html {
 }
 
 .hour {
+    min-height: 50px;
     height: 8vh;
     text-align: right;
 }
