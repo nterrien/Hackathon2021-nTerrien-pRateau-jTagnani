@@ -63,11 +63,16 @@ Nous avons prévu de faire :
 * L'authentification :
     * Les pages sont adaptés pour le format mobile
     * Possibilité de changer son mdp et nom d'utilisateur via l'onglet profil
+* Base de données :
+    * Les réservations sont maintenant faites par un utilisateur
 * FrontEnd :
     * Rajout d'un onglet contact avec nos informations
     * La page de reservation des salles a été faites en entier en factorisant le code pour l'affichage de l'agenda des machines à laver avec celui des salles
     * Mise en avant des créneaux réservés par l'utilisateur et affichage de l'utilisateur ayant réservé un creneau 
     * Ajustement concernant la responsivité de la page de login, de la barre de navigation et de l'agenda
 * Autre :
+    * Nous avons merge l'API dans develop
     * Nous avons constaté qu'apres + d'un jour le base de donnée sur Scalingo n'avais pas disparu
     * Nous avons mis en place le deploiement automatique de la branche develop
+    * Grosse refactorisation et réorganisation du code
+    * Correction de bugs divers
