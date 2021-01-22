@@ -106,7 +106,6 @@ def signin():
         if findUser(username) == None:
             addUser(username, hashPassword)
             print(hashPassword)
-            session['logged_in'] = True
         else:
             flash('Oups ! Sign in failed, user already exists')
         session['username'] = username
