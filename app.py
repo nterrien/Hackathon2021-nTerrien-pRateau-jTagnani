@@ -12,6 +12,8 @@ from reservation.reservation import reservation_general, getReservationWeek
 from reservation.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
 from reservation.objects.room import getRoomList, initRoomList, findRoomWith404
 from utils.timeConversion import timeToMinutes, getDayWeek
+from forms.room_form import RoomForm
+from forms.washing_machine_form import WashingMachineForm
 
 app = Flask(__name__)
 hashing = Hashing(app)
@@ -156,7 +158,7 @@ def washing():
         else:
             flash("Le créneau a bien été reservé.", "success")
 
-    return reservation_general(getMachineList, findMachineWith404, reserve_washingmachine,
+    return reservation_general(WashingMachineForm, getMachineList, findMachineWith404, reserve_washingmachine,
                                "machine", "washing.html.jinja2", session['username'])
 
 # Page de reservation des salles
@@ -178,7 +180,7 @@ def room():
         else:
             flash("Le créneau a bien été reservé.", "success")
 
-    return reservation_general(getRoomList, findRoomWith404, reserve_room,
+    return reservation_general(RoomForm, getRoomList, findRoomWith404, reserve_room,
                                "salle", "room.html.jinja2", session['username'])
 
 

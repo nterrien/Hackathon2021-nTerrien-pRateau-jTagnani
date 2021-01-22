@@ -1,12 +1,11 @@
 from flask import request, render_template
 
 from utils.timeConversion import timeToMinutes, getDayWeek
-from forms.room_form import RoomForm
 from datetime import date
 
 
-def reservation_general(reservableListMethods, findReservablewith404, reservationMethod, reservable_type, template_name, username):
-    form = RoomForm(obj=reservableListMethods())
+def reservation_general(ReservableForm, reservableListMethods, findReservablewith404, reservationMethod, reservable_type, template_name, username):
+    form = ReservableForm(obj=reservableListMethods())
     form.agenda.reservable.choices = [
         g.index for g in reservableListMethods()]
     if "reservation" in request.form and form.reservation.validate(form):
@@ -43,5 +42,4 @@ def getReservationWeek(week, reservable):
             schedule.append(reservation)
             current = timeToMinutes(reservation[3])
         agenda.append(schedule)
-    print(agenda)
     return agenda
