@@ -1,8 +1,5 @@
 from flask import Flask, flash, request, redirect, url_for, make_response, session
 from flask_hashing import Hashing
-from flask_wtf import FlaskForm
-from wtforms import Form, BooleanField, StringField, PasswordField, validators, IntegerField
-from wtforms.validators import DataRequired, EqualTo
 import flask  # BSD License (BSD-3-Clause)
 import os
 import hashlib
@@ -12,11 +9,11 @@ from flask_bootstrap import Bootstrap
 from flask_datepicker import datepicker
 from forms.washing_machine_form import WashingMachineForm
 from forms.room_form import RoomForm
+from forms.login_forms import RegistrationForm, LoginForm, ChangePassword, UsernameForm
 from bdd.database import db, init_database, populate_database, clear_database
 from bdd.dbMethods import addUser, findUser, updateUser, updateUsername
 from utils.objects.washingMachine import getMachineList, initWashingMachineList, findMachineWith404
 from utils.objects.room import getRoomList, initRoomList, findRoomWith404
-from datetime import datetime, date
 
 
 app = Flask(__name__)
@@ -112,23 +109,6 @@ def signin():
         return redirect(url_for('do_admin_login'))
     return flask.render_template("signin.html.jinja2")
 
-
-class RegistrationForm(Form):
-    username = StringField('Username', [validators.Length(min=4, max=25)])
-    password = PasswordField('Password', [validators.DataRequired()])
-
-class LoginForm(Form):
-    username = StringField('Username', [validators.Length(min=4, max=25)])
-    password = PasswordField('Password', [validators.DataRequired()])
-
-class ChangePassword(Form):
-    password = PasswordField('New Password', [validators.DataRequired(), EqualTo(
-        'confirm', message='Passwords must match')])
-    confirm = PasswordField('Repeat password')
-
-
-class UsernameForm(Form):
-    username = StringField('Username', [validators.Length(min=4, max=25)])
 
 
 @app.route('/changePassword', methods=["GET", "POST"])
