@@ -140,7 +140,7 @@ def profil():
             user = result['username']
             session['username'] = user
         else :
-            flash('Cet utilisateur existe déjà')
+            flash("Cet utilisateur existe déjà.", "warning")
         return redirect(url_for('profil'))
     if 'username' in session:
         username = None
